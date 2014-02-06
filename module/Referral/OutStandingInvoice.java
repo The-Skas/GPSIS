@@ -1,4 +1,4 @@
-package module;
+package module.Referral;
 
 	import java.awt.Component;
 import java.awt.FlowLayout;

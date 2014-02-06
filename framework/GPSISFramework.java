@@ -46,9 +46,13 @@ public class GPSISFramework {
 			System.exit(0);
 		}
 		
+	
+	
+	}
+	
+	public static void main(String[] args){
 		LoginModule m = new LoginModule();
 		m.showLogin();
-	
 	}
 	
 	

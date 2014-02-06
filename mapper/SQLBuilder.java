@@ -6,7 +6,6 @@
 
 package mapper;
 import java.util.ArrayList;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -85,18 +84,18 @@ public class SQLBuilder {
      * @param logic
      * @param column
      * @param compr
-     * @param value
+     * @param b
      * @return SQLBuilder
      */
     
-    public SQLBuilder SET(String column, String compr, String value)
+    public SQLBuilder SET(String column, String compr, String b)
     {
         String [] block = new String[SIZE];
         
         block[LOGIC]  = ",";
         block[COLUMN] = column;
         block[COMPR]  = compr;
-        block[VALUE]  = value;
+        block[VALUE]  = b;
         
         qBlocks.add(block);
         return this;

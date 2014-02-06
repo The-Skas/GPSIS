@@ -1,4 +1,4 @@
-package module;
+package module.Referral;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
