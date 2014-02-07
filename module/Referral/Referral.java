@@ -11,6 +11,10 @@ import java.util.Calendar;
 
 import javax.swing.*;
 
+import mapper.ReferralDMO;
+import object.ReferralObject;
+import framework.GPSISDataMapper;
+
 
 public class Referral extends JFrame {
 	private JComboBox combo1;
@@ -57,9 +61,9 @@ public class Referral extends JFrame {
 			find2.setToolTipText("Enter Referral ID");
 			
 			
-			but4 = new JButton("Add Invoice");
-			add(but4);
-			but4.addActionListener(e);
+			//but4 = new JButton("Add Invoice");
+			//add(but4);
+			//but4.addActionListener(e);
 			
 			
 			but2 = new JButton("Outstanding Invoice");
@@ -126,5 +130,15 @@ public class Referral extends JFrame {
 				
 			}
 			
+		}
+		public static void main(String[] args){
+			
+	    	Referral refer = new Referral();
+			refer.setVisible(true);
+			refer.setTitle("Referral");
+			refer.setSize(295, 160);
+			//Closes all windows after referral main window is closed
+			refer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			refer.setResizable(false);
 		}
 }

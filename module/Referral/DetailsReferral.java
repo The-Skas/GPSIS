@@ -1,9 +1,17 @@
 package module.Referral;
 import java.awt.*;
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.swing.*;
+
+import mapper.ReferralDMO;
+import object.ReferralObject;
+import framework.GPSISDataMapper;
 
 
 public class DetailsReferral extends JFrame {
@@ -78,6 +86,7 @@ public class DetailsReferral extends JFrame {
 		a2 = new JTextArea(1,15);
 		add(a2);
 		
+		
 		lab8 = new JLabel("  Doctors Name: ");
 		a8 = new JTextArea(1,15);
 		a8.setText(docName);
@@ -108,6 +117,9 @@ public class DetailsReferral extends JFrame {
 		but1 = new JButton("Make Payment");
 		add(but1);
 		but1.addActionListener(e);
+		//In button action
+		String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+		System.out.println(timeStamp);
 		
 		
 	}
@@ -116,10 +128,41 @@ public class DetailsReferral extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==but1){
-				Payment r = new Payment();
-				r.setVisible(true);
-				r.setTitle("Payment");
-				r.setSize(300, 235);
+				
+				//Save data
+				ReferralDMO referralDMO = ReferralDMO.getInstance();
+				GPSISDataMapper.connectToDatabase();
+				Calendar cal = Calendar.getInstance();
+				java.util.Date dt = cal.getTime();
+				//Turns strings to integers
+				int con = 0,pat = 0,pay = 0;
+				
+				try
+				{
+				   con = Integer.parseInt(a3.getText());
+				   pat = Integer.parseInt(a4.getText());
+				   pay = Integer.parseInt(a3.getText());
+				}
+				catch (NumberFormatException nfe)
+				{
+				   // bad data - set to sentinel
+				   System.out.print("NO");
+				}
+				
+				
+				//have to convert boolean to tiny int
+		    	ReferralObject r = new ReferralObject(5,dt, a8.getText(), con, pat,pay,8,1);
+		    	referralDMO.put(r);
+		    	System.out.print(referralDMO.getById(0).getDocName());
+		    	
+				//Create payment
+			
+				Payment r2 = new Payment();
+				r2.setVisible(true);
+				r2.setTitle("Payment");
+				r2.setSize(300, 235);
+				
+				
 			}
 		}
 		

@@ -1,22 +1,29 @@
 package object;
-import java.sql.Date;
+import java.util.Date;
 
 import framework.GPSIS;
 import framework.GPSISObject;
 
-
 public class ReferralObject extends GPSISObject{
+	private int id;
 	private Date dateMade;
 	private String docName;
 	private int conID,patID,payID,invID;
-	private boolean invPaid;
+	private int invPaid;
 	
 	public ReferralObject(){
 		
 	}
 	
-	public ReferralObject(int id,Date dateMade, String docName, int conID, int patID, int payID, int invID, boolean invPaid){
-		
+	public ReferralObject(int id, Date dateMade, String docName, int conID, int patID, int payID, int invID, int invPaid){
+		this.id = id;
+		this.dateMade = dateMade;
+		this.docName = docName;
+		this.conID=conID;
+		this.patID=patID;
+		this.payID=payID;
+		this.invID=invID;
+		this.invPaid=invPaid;
 	}
 	
 	public Date getDate(){
@@ -37,7 +44,7 @@ public class ReferralObject extends GPSISObject{
 	public int getInvID(){
 		return invID;
 	}
-	public boolean isInvPaid(){
+	public int isInvPaid(){
 		return invPaid;
 	}
 }

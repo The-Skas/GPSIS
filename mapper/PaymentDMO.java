@@ -6,8 +6,8 @@ package mapper;
 
 import module.Referral.*;
 import framework.GPSISDataMapper;
+import object.PaymentObject;
 import object.ReferralObject;
-
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,36 +18,36 @@ import java.util.HashSet;
 
 import javax.swing.JFrame;
 
-public class ReferralDMO extends GPSISDataMapper<ReferralObject> 
+public class PaymentDMO extends GPSISDataMapper<PaymentObject> 
 {   
 	
 	// stores the only instance of this DataMapper
-	private static ReferralDMO instance;
+	private static PaymentDMO instance;
 	
 	/** ReferralDMO Constructor 
 	 * This is Private as part of a Singleton implementation.
 	 * @param tableName
 	 */
-    private ReferralDMO(String tableName)
+    private PaymentDMO(String tableName)
     {
         this.tableName = tableName;
     }    
     
     /** getInstance
-     * returns the only instance of the ReferralDMO
+     * returns the only instance of the PaymentDMO
      * @return
      */
-    public static ReferralDMO getInstance() 
+    public static PaymentDMO getInstance() 
     {
         if(instance == null)
-            instance = new ReferralDMO("Referral");
+            instance = new PaymentDMO("Payment");
         return instance;
     }
         
     /** getAll
-     * return a Set of all Referrals
+     * return a Set of all Payments
      */
-    public Set<ReferralObject> getAll()
+    public Set<PaymentObject> getAll()
     {
         return getAllByProperties(new SQLBuilder());
     }
@@ -55,7 +55,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
      * @param id the id of the Referral to retrieve
      * @return a Referral object that relates to the id
      */
-    public ReferralObject getById(int id)
+    public PaymentObject getById(int id)
     {
         return this.getByProperties(new SQLBuilder("id", "=", ""+id));
     }
@@ -65,7 +65,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
      * @param query an SQLBuilder query
      * @return the first Referral object in the ResultSet
      */
-    public ReferralObject getByProperties(SQLBuilder query) 
+    public PaymentObject getByProperties(SQLBuilder query) 
     {
         try 
         {
@@ -89,16 +89,16 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
      * @param query an SQLBuild query
      * @return a Set containing all of the Referrals that match the given criteria
      */
-    public Set<ReferralObject> getAllByProperties(SQLBuilder query) 
+    public Set<PaymentObject> getAllByProperties(SQLBuilder query) 
     {
-          Set<ReferralObject> Referral = new HashSet<>();
+          Set<PaymentObject> Payment = new HashSet<>();
           
           try 
           {            
             ResultSet res = GPSISDataMapper.getResultSet(query, this.tableName);            
             while(res.next()) // While there's a Referral, create a the Referral object and add it to a Set
             {
-                Referral.add(this.buildReferral(res));
+            	Payment.add(this.buildReferral(res));
             }
 
         } 
@@ -106,7 +106,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
         {
             e.printStackTrace();
         }
-        return Referral;
+        return Payment;
     }
     
     /** buildReferral
@@ -116,19 +116,18 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
      * @return a complete Staff Member
      * @throws SQLException
      */
-    private ReferralObject buildReferral(ResultSet res) throws SQLException
+    private PaymentObject buildReferral(ResultSet res) throws SQLException
     {
     	if (res != null) // if found, create a the Referral object 
         {
   
-    				return	new ReferralObject(res.getInt("id"),
-    								res.getDate("date_made"),
-    								res.getString("doctors_name"),
-    								res.getInt("consultant_id"),
-    								res.getInt("patient_id"),
-    								res.getInt("payment_id"),
-    								res.getInt("invoice_id"),
-    								res.getInt("invoice_paid"));
+    				return new PaymentObject(res.getInt("id"),
+    								res.getInt("referral_id"),
+    								res.getString("Amount"),
+    								res.getString("name_on_card"),
+    								res.getString("account_num"),
+    								res.getString("exp_date"),
+    								res.getString("csc_num"));
     			
         }
         else 
@@ -168,20 +167,17 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
      * Put a given Referral object onto the Database. Similar to the put method in a Map data structure. Used for INSERT and UPDATE
      * @param o The Referral object
      */
-    public void put(ReferralObject o) 
-    
+    public void put(PaymentObject o) 
+ 
     {
-    //To add date as string
-     String s = new SimpleDateFormat("yyyy-MM-dd").format(o.getDate());
      
        SQLBuilder sql = new SQLBuilder("id","=",""+o.getId())
-                .SET("date_made","=",""+s)
-                .SET("doctors_name", "=", ""+o.getDocName())
-                .SET("consultant_id","=",""+o.getConID())
-                .SET("patient_id", "=",""+o.getPatID())
-                .SET("payment_id", "=", ""+o.getPayID())
-                .SET("invoice_id", "=","" +o.getInvID())
-       			.SET("invoice_paid", "=", ""+o.isInvPaid());
+                .SET("referral_id","=",""+o.getRefID())
+                .SET("Amount", "=", ""+o.getTotal())
+                .SET("name_on_card","=",""+o.getName())
+                .SET("account_num", "=",""+o.getAccNum())
+                .SET("exp_date", "=", ""+o.getEX())
+                .SET("csc_num", "=","" +o.getCSC());
         try 
         {
             putHelper(sql, this.tableName);
@@ -196,28 +192,22 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
 	public static void main(String[] args)
     {
 		
-		String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
-		System.out.println(timeStamp);
-		ReferralDMO referralDMO = ReferralDMO.getInstance();
-		
+		PaymentDMO paymentDMO = PaymentDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		
-		Calendar cal = Calendar.getInstance();
-		java.util.Date dt = cal.getTime();
-		
+	
 		//have to convert boolean to tiny int
-    	ReferralObject r = new ReferralObject(3, dt, "jo", 3, 4,5,8,1);
-    	referralDMO.put(r);
-    	System.out.print(referralDMO.getById(0).getDocName());
+    	PaymentObject r = new PaymentObject(223, 323, "t3odtal","n3aame","accdn3um","exda", "csc");
+    	paymentDMO.put(r);
     	
-    	/*Referral refer = new Referral();
+    	Referral refer = new Referral();
 		refer.setVisible(true);
 		refer.setTitle("Referral");
 		refer.setSize(295, 160);
 		//Closes all windows after referral main window is closed
 		refer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		refer.setResizable(false);
-    	*/
+    	
     }
     
 
