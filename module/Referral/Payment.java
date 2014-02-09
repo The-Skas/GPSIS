@@ -16,7 +16,7 @@ public class Payment extends JFrame {
 	private JButton but1;
 	private BufferedWriter writer;
 	
-	public Payment(){
+	public Payment(int payid){
 		setLayout(new FlowLayout());
 		Event e = new Event();
 		
@@ -24,11 +24,15 @@ public class Payment extends JFrame {
 		add(lab1); 
 		a1 = new JTextArea(1,15);
 		add(a1);
+		a1.setText(""+ payid);
+		a1.setEditable(false);
 		
 		xtra = new JLabel("        Referral ID: ");
 		add(xtra); 
 		ax = new JTextArea(1,15);
 		add(ax);
+		ax.setText(""+ payid);
+		ax.setEditable(false);
 		
 		lab6 = new JLabel("  Name on Card: ");
 		add(lab6); 

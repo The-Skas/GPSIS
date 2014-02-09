@@ -64,6 +64,8 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>
      * @param query an SQLBuilder query
      * @return the first Referral object in the ResultSet
      */
+    
+    
     public ConsultantObject getByProperties(SQLBuilder query) 
     {
         try 
@@ -120,7 +122,7 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>
     	if (res != null) // if found, create a the Referral object 
         {
   
-    				return new ConsultantObject(res.getInt("id"),
+    				return new ConsultantObject(
     								res.getString("title"),
     								res.getString("first_name"),
     								res.getString("last_name"),
@@ -168,6 +170,7 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>
      * @param o The Referral object
      */
     public void put(ConsultantObject o){
+    	
     
        SQLBuilder sql = new SQLBuilder("id","=",""+o.getId())
                 .SET("title","=",""+o.getTitle())
@@ -194,7 +197,7 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>
 		GPSISDataMapper.connectToDatabase();
 	
 		//have to convert boolean to tiny int
-		ConsultantObject r = new ConsultantObject(1, "Mr", "jack", "jones", "245 Whatever road E1 4NP", "jack@gmail.com", "07787544532", 120.00);
+		ConsultantObject r = new ConsultantObject("Mr", "jack", "jones", "245 Whatever road E1 4NP", "jack@gmail.com", "07787544532", 120.00);
 		consultantDMO.put(r);
     	
     	/*Referral refer = new Referral();

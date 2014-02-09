@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 
 public class ReferralDMO extends GPSISDataMapper<ReferralObject> 
 {   
+	private int i;
 	
 	// stores the only instance of this DataMapper
 	private static ReferralDMO instance;
@@ -121,7 +122,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
     	if (res != null) // if found, create a the Referral object 
         {
   
-    				return	new ReferralObject(res.getInt("id"),
+    				return	new ReferralObject(
     								res.getDate("date_made"),
     								res.getString("doctors_name"),
     								res.getInt("consultant_id"),
@@ -173,6 +174,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
     {
     //To add date as string
      String s = new SimpleDateFormat("yyyy-MM-dd").format(o.getDate());
+    
      
        SQLBuilder sql = new SQLBuilder("id","=",""+o.getId())
                 .SET("date_made","=",""+s)
@@ -181,7 +183,10 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
                 .SET("patient_id", "=",""+o.getPatID())
                 .SET("payment_id", "=", ""+o.getPayID())
                 .SET("invoice_id", "=","" +o.getInvID())
+                //So they have the same id as the referral itself
        			.SET("invoice_paid", "=", ""+o.isInvPaid());
+       
+       i = o.getId();
         try 
         {
             putHelper(sql, this.tableName);
@@ -190,10 +195,13 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
         {
         	System.err.println(e.getMessage());
         }
-
+    }
+    public int getit(){
+    	return i;
     }
    
 	public static void main(String[] args)
+	
     {
 		
 		String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
@@ -206,7 +214,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
 		java.util.Date dt = cal.getTime();
 		
 		//have to convert boolean to tiny int
-    	ReferralObject r = new ReferralObject(3, dt, "jo", 3, 4,5,8,1);
+    	ReferralObject r = new ReferralObject(dt, "jo", 2, 2,1,3,2);
     	referralDMO.put(r);
     	System.out.print(referralDMO.getById(0).getDocName());
     	

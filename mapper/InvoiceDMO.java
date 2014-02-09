@@ -6,6 +6,7 @@ package mapper;
 
 import module.Referral.*;
 import framework.GPSISDataMapper;
+import object.ConsultantObject;
 import object.InvoiceObject;
 import object.PaymentObject;
 import object.ReferralObject;
@@ -121,14 +122,14 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
     private InvoiceObject buildReferral(ResultSet res) throws SQLException
     {
     	if (res != null) // if found, create a the Referral object 
-        {
+    	{
   
     				return new InvoiceObject(res.getInt("id"),
     								res.getInt("referral_id"),
     								res.getDouble("amount"),
     								res.getInt("consultant_id"),
-    								res.getInt("date_recieved"),
-    								res.getString("paid"));
+    								res.getString("date_recieved"),
+    								res.getInt("paid"));
     			
         }
         else 
@@ -168,9 +169,8 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
      * Put a given Referral object onto the Database. Similar to the put method in a Map data structure. Used for INSERT and UPDATE
      * @param o The Referral object
      */
-    public void put(InvoiceObject o) 
-    {
-     
+    public void put(InvoiceObject o){
+    
        SQLBuilder sql = new SQLBuilder("id","=",""+o.getId())
                 .SET("referral_id","=",""+o.getRefID())
                 .SET("amount", "=", ""+o.getAmount())
@@ -185,7 +185,6 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
         {
         	System.err.println(e.getMessage());
         }
-
     }
    
 	public static void main(String[] args)
@@ -195,9 +194,9 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
 		GPSISDataMapper.connectToDatabase();
 	
 		//have to convert boolean to tiny int
-		InvoiceObject r = new InvoiceObject(3,5,5.45, 53,56,"2013-04-13");
+		InvoiceObject r = new InvoiceObject(66,10,7.3,8,"2014-04-02", 7);
 		invoiceDMO.put(r);
-    	
+
     	/*Referral refer = new Referral();
 		refer.setVisible(true);
 		refer.setTitle("Referral");

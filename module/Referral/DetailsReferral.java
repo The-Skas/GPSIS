@@ -128,40 +128,7 @@ public class DetailsReferral extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource()==but1){
-				
 				//Save data
-				ReferralDMO referralDMO = ReferralDMO.getInstance();
-				GPSISDataMapper.connectToDatabase();
-				Calendar cal = Calendar.getInstance();
-				java.util.Date dt = cal.getTime();
-				//Turns strings to integers
-				int con = 0,pat = 0,pay = 0;
-				
-				try
-				{
-				   con = Integer.parseInt(a3.getText());
-				   pat = Integer.parseInt(a4.getText());
-				   pay = Integer.parseInt(a3.getText());
-				}
-				catch (NumberFormatException nfe)
-				{
-				   // bad data - set to sentinel
-				   System.out.print("NO");
-				}
-				
-				
-				//have to convert boolean to tiny int
-		    	ReferralObject r = new ReferralObject(5,dt, a8.getText(), con, pat,pay,8,1);
-		    	referralDMO.put(r);
-		    	System.out.print(referralDMO.getById(0).getDocName());
-		    	
-				//Create payment
-			
-				Payment r2 = new Payment();
-				r2.setVisible(true);
-				r2.setTitle("Payment");
-				r2.setSize(300, 235);
-				
 				
 			}
 		}

@@ -3,8 +3,13 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.*;
+
+import mapper.ReferralDMO;
+import object.ReferralObject;
+import framework.GPSISDataMapper;
 
 public class MakeReferral extends JFrame {
 	private JComboBox combo1;
@@ -61,12 +66,53 @@ public class MakeReferral extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			
 			if(e.getSource()== but1){
+				
 				if((text1.getText().length() >=1)&&(text2.getText().length() >=1)){
-				DetailsReferral r = new DetailsReferral(text1.getText(), text2.getText());
-				r.setVisible(true);
-				r.setTitle("Created Referral");
-				r.setSize(300, 200);
+				
+				ReferralDMO referralDMO = ReferralDMO.getInstance();
+				GPSISDataMapper.connectToDatabase();
+				
+				//Creates Date
+				Calendar cal = Calendar.getInstance();
+				java.util.Date dt = cal.getTime();
+				
+				//Turns strings to integers
+				int con = 0,pat = 0,pay = 0;
+				
+					try
+					{
+						con = 1;
+						pat = Integer.parseInt(text2.getText());
+					}
+					catch (NumberFormatException nfe)
+					{
+						// bad data - set to sentinel
+						System.out.print("NO");
+					}
+				
+				
+				//have to convert boolean to tiny int
+		    	ReferralObject r = new ReferralObject(dt, text1.getText(), con, pat,8,1,1);
+		    	referralDMO.put(r);
+		    	System.out.println(referralDMO.getit());
+		    	System.out.print(referralDMO.getById(0).getDocName());
+		    	JOptionPane.showMessageDialog(null, "Your Referral ID is: "+ referralDMO.getit());
+		    	
+				//Create payment
+			
+				Payment r2 = new Payment(referralDMO.getit());
+				r2.setVisible(true);
+				r2.setTitle("Payment");
+				r2.setSize(300, 235);
 				}
+				
+				
+				
+				
+
+				
+				
+				
 				else if(text1.getText().length() <1){
 						JOptionPane.showMessageDialog(null, "Enter Your Name!");
 				}

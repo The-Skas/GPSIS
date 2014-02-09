@@ -17,7 +17,7 @@ public class InvoiceObject  extends GPSISObject{
 			
 		}
 		
-		public InvoiceObject(int id, int refid, double amount, int conid, int ispaid, String date){
+		public InvoiceObject(int id, int refid, double amount, int conid,String date, int ispaid){
 			this.id = id;
 			this.refid = refid;
 			this.amount = amount;

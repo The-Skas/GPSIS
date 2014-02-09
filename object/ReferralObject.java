@@ -15,7 +15,7 @@ public class ReferralObject extends GPSISObject{
 		
 	}
 	
-	public ReferralObject(int id, Date dateMade, String docName, int conID, int patID, int payID, int invID, int invPaid){
+	public ReferralObject(Date dateMade, String docName, int conID, int patID, int invID, int invPaid, int payID){
 		this.id = id;
 		this.dateMade = dateMade;
 		this.docName = docName;

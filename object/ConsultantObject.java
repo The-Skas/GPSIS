@@ -7,7 +7,6 @@ import framework.GPSIS;
 import framework.GPSISObject;
 
 public class ConsultantObject extends GPSISObject{
-	
 		private int id;
 		private String fname, lname, title, address, email, contactnum, speciality;
 		private double price;
@@ -16,9 +15,9 @@ public class ConsultantObject extends GPSISObject{
 			
 		}
 		
-		public ConsultantObject(int id, String title, String fname, String lname,String address, String email, String contactnum,
+		public ConsultantObject(String title, String fname, String lname,String address, String email, String contactnum,
 				double price){
-			this.id = id;
+			this.id= getId();
 			this.title = title;
 			this.fname=fname;
 			this.lname = lname;
