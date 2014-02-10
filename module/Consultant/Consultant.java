@@ -190,6 +190,10 @@ public class Consultant extends JFrame{
 		//Saving
 		if((e.getSource()==butt3)&&(counter<1)){
 			//need to update as not making new entry every time just changing info
+			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
+			GPSISDataMapper.connectToDatabase();
+			
+		
 		}
 		
         //Removed by ID
