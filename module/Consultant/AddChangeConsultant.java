@@ -60,7 +60,7 @@ public class AddChangeConsultant extends JFrame {
 					ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 					GPSISDataMapper.connectToDatabase();
 					ConsultantObject r = new ConsultantObject();
-					//Change to id but for the moment im having problem with id
+					
 					String s = consultantDMO.getById(id).getTitle();
 					Consultant consul = new Consultant(id,consultantDMO.getById(id).getTitle(),consultantDMO.getById(id).getFName(),
 							consultantDMO.getById(id).getLName(),consultantDMO.getById(id).getAddress(),consultantDMO.getById(id).getEmail(),

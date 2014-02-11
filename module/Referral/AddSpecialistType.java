@@ -1,10 +1,10 @@
 package module.Referral;
-
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.*;
@@ -26,11 +26,13 @@ public class AddSpecialistType extends JFrame {
 	private JCheckBox jc,jc2;
 	private int check = 0;
 	private Set<SpecialityTypeObject> set1;
+	private int ID;
 	
-	public AddSpecialistType(){
+	public AddSpecialistType(int ID){
 		setLayout(new FlowLayout());
 		Event e = new Event();
 		
+		this.ID = ID;
 		//Populate dropdown
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
@@ -39,6 +41,11 @@ public class AddSpecialistType extends JFrame {
 		for(SpecialityTypeObject x:set1){
 			arr1.add(x.getName());
 		}
+		//taking out duplicate entrys
+		HashSet hset = new HashSet();
+		hset.addAll(arr1);
+		arr1.clear();
+		arr1.addAll(hset);
 		//sort arraylist here
 		Collections.sort(arr1);
 		//Add Dropdown choices
@@ -46,7 +53,6 @@ public class AddSpecialistType extends JFrame {
 		for(int i=0;i<arr1.size();i++){
 			array[i] = arr1.get(i);
 		}
-	
 		
 		lab1 = new JLabel("Select Speciality: ");
 		add(lab1);
@@ -58,20 +64,17 @@ public class AddSpecialistType extends JFrame {
 		tlb1 = new JTextArea(3,13);
 		add(tlb1);
 		
-		but2 = new JButton("Add");
+		but2 = new JButton("Add From List");
 		add(but2);
-		but2.setToolTipText("To consultant (Chosen from Dropdown)");
+		but2.setToolTipText("Choose from dropdown");
 		but2.addActionListener(e);
 		
-		but4 = new JButton("Add to list");
+		but4 = new JButton("Add From TextBox");
 		add(but4);
-		but4.setToolTipText("Populate dropdown list");
+		but4.setToolTipText("Enter Type into textbox");
 		but4.addActionListener(e);
-	
-		but3 = new JButton("Update list");
-		add(but3);
-		but3.setToolTipText("Populate dropdown list");
-		but3.addActionListener(e);
+		
+		
 		
 		
 	}
@@ -85,26 +88,36 @@ public class AddSpecialistType extends JFrame {
 				SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 				GPSISDataMapper.connectToDatabase();
 				//Put in get consultantID once get works(where 4 is)
-				SpecialityTypeObject r = new SpecialityTypeObject(tlb1.getText(), 4);
+				SpecialityTypeObject r = new SpecialityTypeObject(tlb1.getText(), ID);
 				specialityTypeDMO.put(r);
 				JOptionPane.showMessageDialog(null, "Added");
+				setVisible(false);
 			}
-			if(e.getSource()==but3){
+			if(e.getSource()==but2){
+				SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
+				GPSISDataMapper.connectToDatabase();
+				//Put in get consultantID once get works(where 4 is)
+				//Turn choice into String
+				String s = (String) jcb.getSelectedItem();
+				//Insert String as type argument
+				SpecialityTypeObject r = new SpecialityTypeObject(s, ID);
+				specialityTypeDMO.put(r);
+				JOptionPane.showMessageDialog(null, "Added");
+				setVisible(false);
 				
-				AddSpecialistType as = new AddSpecialistType();
+			}
+			//No longer needed
+			/*if(e.getSource()==but3){
+				
+				AddSpecialistType as = new AddSpecialistType(ID);
 				as.setVisible(true);
 				as.setSize(300, 170);
 				as.setTitle("Add Specialist type");
 				setVisible(false);
 				//close previous window upon opening this one
 			}
+			*/
 		}
 		
-	}
-	public static void main(String[] args){
-		AddSpecialistType as = new AddSpecialistType();
-		as.setVisible(true);
-		as.setSize(300, 170);
-		as.setTitle("Add Specialist type");
 	}
 }

@@ -8,17 +8,20 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Set;
 
 import javax.swing.*;
 
 import mapper.ReferralDMO;
+import mapper.SpecialityTypeDMO;
 import object.ReferralObject;
+import object.SpecialityTypeObject;
 import framework.GPSISDataMapper;
 
 
 public class Referral extends JFrame {
 	private JComboBox combo1;
-	private String[] choices = {"Referral ID", "Patient ID"};
+	private String[] choices = {"Referral ID", "Payment ID"};
 	private JLabel lab1,tab1,tab2,tab3,find1,l;
 	private JButton but1, but2, but3, but4, but5,find2;
 	private JTextArea text1,find3;
@@ -91,7 +94,7 @@ public class Referral extends JFrame {
 					MakeReferral r = new MakeReferral();
 					r.setVisible(true);
 					r.setTitle("Make Referral");
-					r.setSize(240, 170);
+					r.setSize(240, 190);
 				}
 				
 				else if((e.getSource()== but1)&&(text1.getText().length()>=1)){
@@ -99,10 +102,22 @@ public class Referral extends JFrame {
 					String selection = (String)combo1.getSelectedItem();
 					String searchValue = text1.getText();
 					//Insert number at the end as the other method has 2 string arguments
-					DetailsReferral r = new DetailsReferral(selection, searchValue, 0);
-					r.setVisible(true);
-					r.setTitle("Found Referral");
-					r.setSize(300, 200);
+					
+					try{
+						
+						ReferralDMO referralDMO = ReferralDMO.getInstance();
+						GPSISDataMapper.connectToDatabase();
+						ReferralObject r2 = referralDMO.getById(Integer.parseInt(searchValue));
+					
+						DetailsReferral r = new DetailsReferral(selection, searchValue, r2);
+						r.setVisible(true);
+						r.setTitle("Found Referral");
+						r.setSize(320, 200);
+						
+						}catch(Exception eee){
+							JOptionPane.showMessageDialog(null,  "Selection error");
+						}
+					
 				}
 				else if((e.getSource()== but1)&&(text1.getText().length()<1)){
 					JOptionPane.showMessageDialog(null, "Please enter value");
@@ -127,18 +142,39 @@ public class Referral extends JFrame {
 					r.setTitle("Outstanding Invoice");
 					r.setSize(300, 80);
 				}
-				
 			}
 			
 		}
 		public static void main(String[] args){
 			
+			try{
+			ReferralDMO referralDMO = ReferralDMO.getInstance();
+			GPSISDataMapper.connectToDatabase();
+			ReferralObject r2 = referralDMO.getById(63);
+			String s = "";
+			if(r2.isInvPaid()>0){
+				s = "PAID";
+			}
+			System.out.print(s);
+			System.out.print(r2.getId());
+			
+			
+			}catch(Exception eee){
+				JOptionPane.showMessageDialog(null,  "Selection error");
+			}
+
+			
+			
+			
 	    	Referral refer = new Referral();
+	    	
 			refer.setVisible(true);
 			refer.setTitle("Referral");
-			refer.setSize(295, 160);
+			refer.setSize(320, 160);
 			//Closes all windows after referral main window is closed
 			refer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			refer.setResizable(false);
+		
 		}
 }
+

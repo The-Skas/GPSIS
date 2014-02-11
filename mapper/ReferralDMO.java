@@ -122,7 +122,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
     	if (res != null) // if found, create a the Referral object 
         {
   
-    				return	new ReferralObject(
+    				return	new ReferralObject(res.getInt("id"),
     								res.getDate("date_made"),
     								res.getString("doctors_name"),
     								res.getInt("consultant_id"),
@@ -214,7 +214,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
 		java.util.Date dt = cal.getTime();
 		
 		//have to convert boolean to tiny int
-    	ReferralObject r = new ReferralObject(dt, "jo", 2, 2,1,3,2);
+    	ReferralObject r = new ReferralObject(0,dt, "jo", 2, 2,1,3,2);
     	referralDMO.put(r);
     	System.out.print(referralDMO.getById(0).getDocName());
     	

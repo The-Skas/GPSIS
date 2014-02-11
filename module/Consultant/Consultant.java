@@ -1,14 +1,18 @@
 package module.Consultant;
 import java.awt.FlowLayout;
+import object.SpecialityTypeObject;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.*;
 
 import mapper.ConsultantDMO;
 import mapper.SQLBuilder;
+import mapper.SpecialityTypeDMO;
 import module.Referral.AddSpecialistType;
 import object.ConsultantObject;
+import object.SpecialityTypeObject;
 import framework.GPSISDataMapper;
 
 public class Consultant extends JFrame{
@@ -25,7 +29,7 @@ public class Consultant extends JFrame{
 		Event e = new Event();
 		
 		this.ID=s;
-		
+		System.out.print(s);
 		lab1 = new JLabel("Title: ");
 		add(lab1);
 		jb1 = new JTextArea(1,15);
@@ -74,6 +78,17 @@ public class Consultant extends JFrame{
 		add(lab9);
 		jb9 = new JTextArea(2,13);
 		add(jb9);
+		//Search speciality by id and make a string a combination of the specialitys and add them to the jb9
+		String spec = "";
+		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
+		GPSISDataMapper.connectToDatabase();
+		Set<SpecialityTypeObject> tempset = specialityTypeDMO.getAll();
+		for(SpecialityTypeObject x:tempset){
+			if(ID == x.getConID()){
+				spec += x.getName() + ", ";
+			}
+		}
+		jb9.setText(spec);
 		jb9.setEditable(false);
 		
 		
@@ -168,7 +183,7 @@ public class Consultant extends JFrame{
 		if((e.getSource()==but1)&&(counter<1)){
 				counter+=1;
 				double amo =0;
-				
+			
 				try{
 				amo= Double.parseDouble(jb8.getText().trim());
 			
@@ -178,14 +193,15 @@ public class Consultant extends JFrame{
 				ConsultantObject r = new ConsultantObject(jb1.getText(), jb2.getText(), jb3.getText(), jb4.getText(),
 														  jb5.getText(), jb6.getText(), amo);
 				consultantDMO.put(r);
-				butt3.setText("Saved!");
+				setVisible(false);
+				
 				//Close current window here
 				//JOptionPane.showMessageDialog(null,""+consultantDMO.getById(4).getEmail());
 				
 				}catch(NumberFormatException eee){
 						JOptionPane.showMessageDialog(null, "Please Enter valid data" );
+						setVisible(false);
 				}
-			
 		}
 		//Saving
 		if((e.getSource()==butt3)&&(counter<1)){
@@ -203,8 +219,9 @@ public class Consultant extends JFrame{
 			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 			GPSISDataMapper.connectToDatabase();
 			ConsultantObject r = new ConsultantObject();
-			consultantDMO.removeById(ID);;
+			consultantDMO.removeById(ID);
 			butt2.setText("Removed");
+			setVisible(false);
 			//close current window here 
 
 		}
@@ -212,13 +229,13 @@ public class Consultant extends JFrame{
 			//SpecialityDMO specialityDMO = SpecialityDMO.getInstance();
 			//GPSISDataMapper.connectToDatabase();
 			//SpecialityObject r = new SpecialityObject();
-			AddSpecialistType as = new AddSpecialistType();
+			AddSpecialistType as = new AddSpecialistType(ID);
 			as.setVisible(true);
 			as.setSize(300, 170);
 			as.setTitle("Add Specialist type");
+			//Hide window
+			setVisible(false);
 		}
-		
 	}
-	
 }
 }

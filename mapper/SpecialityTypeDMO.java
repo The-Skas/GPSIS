@@ -181,33 +181,5 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>
         	System.err.println(e.getMessage());
         }
     }
-   
-	public static void main(String[] args)
-    {
-		
-		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
-		GPSISDataMapper.connectToDatabase();
-	
-		//have to convert boolean to tiny int
-		SpecialityTypeObject r = new SpecialityTypeObject("Gastric whatever", 7);
-		specialityTypeDMO.put(r);
-		System.out.print(r.getId());
-		specialityTypeDMO.getAll();
-		
-		
-		
-    	
-    	/*Referral refer = new Referral();
-		refer.setVisible(true);
-		refer.setTitle("Referral");
-		refer.setSize(295, 160);
-		//Closes all windows after referral main window is closed
-		refer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		refer.setResizable(false);
-		*/
-    	
-    }
-    
 
 }
