@@ -174,7 +174,7 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>
                 .SET("consultant_id", "=", ""+o.getConID());
         try 
         {
-            putHelper(sql, this.tableName);
+            putHelper(sql, this.tableName, o);
         } 
         catch (SQLException e) 
         {

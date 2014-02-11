@@ -182,7 +182,8 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>
                 .SET("price", "=", ""+o.getPrice());
         try 
         {
-            putHelper(sql, this.tableName);
+        	//ADD OOOOOO
+            putHelper(sql, this.tableName, o);
         } 
         catch (SQLException e) 
         {

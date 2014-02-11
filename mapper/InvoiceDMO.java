@@ -179,7 +179,7 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
                 .SET("paid", "=", ""+o.getIsPaid());
         try 
         {
-            putHelper(sql, this.tableName);
+            putHelper(sql, this.tableName, o);
         } 
         catch (SQLException e) 
         {

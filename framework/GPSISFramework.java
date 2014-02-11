@@ -6,6 +6,7 @@ package framework;
  * @version 2
  */
 
+import object.StaffMember;
 import mapper.*;
 import module.*;
 
@@ -16,9 +17,12 @@ public class GPSISFramework {
 	protected static StaffMemberDMO staffMemberDMO = StaffMemberDMO.getInstance();
 	protected static TaxOfficeDMO taxOfficeDMO = TaxOfficeDMO.getInstance();
 	protected static CalendarAppointmentDMO calendarAppointmentDMO = CalendarAppointmentDMO.getInstance();
-//  protected static PatientDMO patientDMO;
+        protected static PatientDMO patientDMO = PatientDMO.getInstance();
 //	protected static AppointmentDMO appointmentDMO
 //	etc.
+	
+	protected static final String APPTITLE = "General Practitioner's Surgery Information System";
+	protected static StaffMember currentUser;
 	
 	
 	/** initialise

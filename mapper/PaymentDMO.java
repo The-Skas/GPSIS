@@ -180,7 +180,7 @@ public class PaymentDMO extends GPSISDataMapper<PaymentObject>
                 .SET("csc_num", "=","" +o.getCSC());
         try 
         {
-            putHelper(sql, this.tableName);
+            putHelper(sql, this.tableName, o);
         } 
         catch (SQLException e) 
         {

@@ -189,7 +189,7 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>
        i = o.getId();
         try 
         {
-            putHelper(sql, this.tableName);
+            putHelper(sql, this.tableName, o);
         } 
         catch (SQLException e) 
         {
