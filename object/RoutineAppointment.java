@@ -1,27 +1,10 @@
 package object;
 import java.util.Calendar;
 import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import object.CalendarAppointment;
-import object.CareManagementAppointment;
-import object.CareProgramme;
-import object.Patient;
-import object.RoutineAppointment;
-import object.StaffMember;
-import exception.EmptyResultSetException;
-import framework.GPSISDataMapper;
+ 
 public class RoutineAppointment extends CalendarAppointment{
  
- ///   Calendar cal = java.util.Calendar.getInstance(); 
+    Calendar cal = java.util.Calendar.getInstance(); 
      
     protected Patient patient; 
     protected StaffMember doctor;
@@ -46,11 +29,6 @@ public class RoutineAppointment extends CalendarAppointment{
      this.summary = s;
      calendarAppointmentDMO.put(this);
     }
-    
-    public String getSummary()
-    {
-    	return this.summary;
-    }
  
     public Patient getPatient()
     {
@@ -61,12 +39,6 @@ public class RoutineAppointment extends CalendarAppointment{
     {
         return this.doctor;
     }
-    
-    /*public static void main(String[] args)
-    {
-    	
-    }*/
-    
     // for Routine Appointments, eT should always be sT + 15 mins
     /* public RoutineAppointment makeNewRoutineAppointment(Date sT, Date eT, StaffMember d, String s){
          

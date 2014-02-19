@@ -8,15 +8,13 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-/*
+
 //Inherits GPSISDataMapper<SpecialityTypeObject>'s methods
 public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>{   
 	// stores the only instance of this DataMapper
@@ -33,7 +31,19 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>{
             instance = new SpecialityTypeDMO("ConsultantSpeciality");
         return instance;
     }
-           
+        
+    //Returns a Set of all Speciality's
+    //getAll
+    public Set<SpecialityTypeObject> getAll(){
+        return getAllByProperties(new SQLBuilder());
+    }
+    
+    //Returns a SpecialityType object that relates to the id
+    //getById 
+    public SpecialityTypeObject getById(int id){
+        return this.getByProperties(new SQLBuilder("id", "=", ""+id));
+    }
+    
     //Returns the first SpecialityType object matching the criteria
     //getByProperties
     public SpecialityTypeObject getByProperties(SQLBuilder query){
@@ -56,9 +66,9 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>{
         
     //returns a Set of SpecialityTypes that match the given criteria
     //getAllByProperties
-    public List<SpecialityTypeObject> getAllByProperties(SQLBuilder query) 
+    public Set<SpecialityTypeObject> getAllByProperties(SQLBuilder query) 
     {
-          List<SpecialityTypeObject> SpecialityType = new ArrayList<>();
+          Set<SpecialityTypeObject> SpecialityType = new HashSet<>();
           
           try 
           {            
@@ -96,6 +106,26 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>{
 		return null;
     }
     
+    //Remove a SpecialityType from the database given its Id
+    //removeById
+    public void removeById(int id){
+        try 
+        {
+            removeByProperty(new SQLBuilder("id","=",""+id));
+        } 
+        catch (SQLException e) 
+        {
+        	JOptionPane.showMessageDialog(null,e.getMessage());
+        }
+    }
+    
+    //Removes all SpecialityTypes from the database that match the given criteria
+    //removeByProperty
+    public void removeByProperty(SQLBuilder query) throws SQLException 
+    {
+        GPSISDataMapper.removeByPropertyHelper(query, this.tableName);        
+    }
+
     //Put a given SpecialityType object onto the Database. Used for INSERT and UPDATE
     //put
     public void put(SpecialityTypeObject o){
@@ -113,4 +143,4 @@ public class SpecialityTypeDMO extends GPSISDataMapper<SpecialityTypeObject>{
         }
     }
 
-}*/
+}

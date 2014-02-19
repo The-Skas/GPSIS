@@ -25,6 +25,13 @@ public class TaxForm extends GPSISObject {
 	}
 
 	/**
+	 * @return the taxOffice
+	 */
+	public TaxOffice getTaxOffice() {
+		return taxOffice;
+	}
+
+	/**
 	 * @return the number
 	 */
 	public char[] getNumber() {
@@ -36,13 +43,6 @@ public class TaxForm extends GPSISObject {
 	 */
 	public BigDecimal getSalary() {
 		return salary;
-	}
-
-	/**
-	 * @return the taxOffice
-	 */
-	public TaxOffice getTaxOffice() {
-		return taxOffice;
 	}
 
 	

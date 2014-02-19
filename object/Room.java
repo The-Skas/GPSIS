@@ -1,20 +1,13 @@
 package object;
 
-import mapper.RoomDMO;
 import framework.GPSISObject;
+import mapper.RoomDMO;
 
 public class Room extends GPSISObject {
 	private String description;
         
         //Skas: Another Call Replaced to Singleton Pattern.
 	protected static RoomDMO tbl = RoomDMO.getInstance();
-	
-	// used when creating an instance from database by DMO
-	public Room(int id, String desc)
-	{
-		this.id = id;
-		this.description = desc;
-	}
 	
 	// get DMO
 	// put using DMO
@@ -23,6 +16,13 @@ public class Room extends GPSISObject {
 		this.description = desc;
 		
 		tbl.put(this);
+	}
+	
+	// used when creating an instance from database by DMO
+	public Room(int id, String desc)
+	{
+		this.id = id;
+		this.description = desc;
 	}
 
 	public String getDescription()

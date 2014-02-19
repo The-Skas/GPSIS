@@ -5,24 +5,28 @@
  */
 
 package mapper;
+import framework.GPSISDataMapper;
+import static framework.GPSISDataMapper.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import object.Patient;
-import framework.GPSISDataMapper;
+import object.StaffMember;
 /**
  *
  * @author skas
  */
 public class PatientDMO extends GPSISDataMapper<Patient> 
 {
+    private PatientDMO(String tableName)
+    {
+        this.tableName = tableName;
+    }
+    
     private static PatientDMO instance;
     
     public static PatientDMO getInstance() 
@@ -34,56 +38,18 @@ public class PatientDMO extends GPSISDataMapper<Patient>
         return instance;
     }
     
-    public static void main(String [] args)
-    {
-        GPSISDataMapper.connectToDatabase();
-        PatientDMO tbl = PatientDMO.getInstance();
+    public Patient getPermenantPatientById(int id) throws SQLException
+    {   
+        Patient patient = null;
         
-        Patient patient;
-        //Should return Patient whos ID is one.
-//        Patient patient = tbl.getById(1);
-
-        patient = new Patient(11,"jeezus", "beans", 'm', "n123fx", "London", "0737231313", new Date(1,3,4));
+        ResultSet rs = 
+                GPSISDataMapper.getResultSet(
+                        new SQLBuilder("id","=",""+id), this.tableName
+                );
         
-        tbl.put(patient);
-        
-        System.out.println(patient.getId());
+        return patient;
     }
     
-    private PatientDMO(String tableName)
-    {
-        this.tableName = tableName;
-    }
-    
-
-    @Override
-    public List<Patient> getAllByProperties(SQLBuilder query) {
-        List<Patient> patients = new ArrayList<>();
-        
-        try {
-            ResultSet res = GPSISDataMapper.getResultSet(query, this.tableName);
-            while(res.next()) 
-            { // if found, create a the patient object
-
-                //Before I add it, surely I would want a refrence to set
-                //its NHS Number for the permenant Patients.
-                patients.add(new Patient( res.getInt("id"), 
-                                    res.getString("first_name"), 
-                                    res.getString("last_name"),
-                                    res.getString("sex").charAt(0),
-                                    res.getString("postcode"), 
-                                    res.getString("address"),
-                                    res.getString("phone"),
-                                    res.getDate("dob")));
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-            
-        return patients;
-        
-    }    
 
     @Override
     public Patient getByProperties(SQLBuilder query) {
@@ -120,18 +86,50 @@ public class PatientDMO extends GPSISDataMapper<Patient>
             e.printStackTrace();
         }
         return null;
+    }    
+
+    @Override
+    public Set<Patient> getAllByProperties(SQLBuilder query) {
+        Set<Patient> patients = new HashSet<>();
+        
+        try {
+            ResultSet res = GPSISDataMapper.getResultSet(query, this.tableName);
+            while(res.next()) 
+            { // if found, create a the patient object
+
+                //Before I add it, surely I would want a refrence to set
+                //its NHS Number for the permenant Patients.
+                patients.add(new Patient( res.getInt("id"), 
+                                    res.getString("first_name"), 
+                                    res.getString("last_name"),
+                                    res.getString("sex").charAt(0),
+                                    res.getString("postcode"), 
+                                    res.getString("address"),
+                                    res.getString("phone"),
+                                    res.getDate("dob")));
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+            
+        return patients;
+        
     }
 
-    public Patient getPermenantPatientById(int id) throws SQLException
-    {   
-        Patient patient = null;
+    @Override
+    public void removeById(int id) {
+        try {
+            removeByProperty(new SQLBuilder("id","=",""+id));
+        } catch (SQLException ex) {
+            Logger.getLogger(StaffMemberDMO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void removeByProperty(SQLBuilder query) throws SQLException 
+    {
+        GPSISDataMapper.removeByPropertyHelper(query, this.tableName);
         
-        ResultSet rs = 
-                GPSISDataMapper.getResultSet(
-                        new SQLBuilder("id","=",""+id), this.tableName
-                );
-        
-        return patient;
     }
     
     @Override
@@ -150,5 +148,23 @@ public class PatientDMO extends GPSISDataMapper<Patient>
             Logger.getLogger(StaffMemberDMO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
+    
+    public static void main(String [] args)
+    {
+        GPSISDataMapper.connectToDatabase();
+        PatientDMO tbl = PatientDMO.getInstance();
+        
+        Patient patient;
+        //Should return Patient whos ID is one.
+//        Patient patient = tbl.getById(1);
+
+        patient = new Patient(11,"jeezus", "beans", 'm', "n123fx", "London", "0737231313", new Date(1,3,4));
+        
+        tbl.put(patient);
+        
+        System.out.println(patient.getId());
+    }
+    
+
+    
 }

@@ -13,6 +13,8 @@ import object.StaffMember;
  */
 public abstract class GPSISModuleMain extends GPSISFramework {
 	
+	public abstract JPanel getModuleView();
+	
 	// variable placeholders
 	public static final String GPSISLOGO = "GP-SIS Logo"; //ImageIcon icon = new ImageIcon("", ""); USE LATER WHEN WE HAVE A LOGO	
 	
@@ -25,6 +27,4 @@ public abstract class GPSISModuleMain extends GPSISFramework {
 	{
 		return GPSISLOGO;
 	}
-	
-	public abstract JPanel getModuleView();
 }

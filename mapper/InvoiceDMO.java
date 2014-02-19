@@ -10,9 +10,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -41,7 +39,7 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
    
     //return a Set of all Invoices
     //getAll
-    public List<InvoiceObject> getAll(){
+    public Set<InvoiceObject> getAll(){
         return getAllByProperties(new SQLBuilder());
     }
   
@@ -71,9 +69,9 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
     
     //returns a Set of Invoices that match the given criteria
     //getAllByProperties
-    public List<InvoiceObject> getAllByProperties(SQLBuilder query) 
+    public Set<InvoiceObject> getAllByProperties(SQLBuilder query) 
     {
-          List<InvoiceObject> Invoice = new ArrayList<>();
+          Set<InvoiceObject> Invoice = new HashSet<>();
           
           try 
           {            

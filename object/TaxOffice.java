@@ -40,11 +40,6 @@ public class TaxOffice extends GPSISObject {
 		taxOfficeDMO.put(this);
 	}
 	
-	public String getLocality()
-	{
-		return this.locality;
-	}
-	
 	public String getName()
 	{
 		return this.name;
@@ -55,6 +50,16 @@ public class TaxOffice extends GPSISObject {
 		return this.noAndStreet;
 	}
 	
+	public String getLocality()
+	{
+		return this.locality;
+	}
+	
+	public String getTown()
+	{
+		return this.town;
+	}
+	
 	public String getPostcodeArea()
 	{
 		return this.postcodeArea;
@@ -63,10 +68,5 @@ public class TaxOffice extends GPSISObject {
 	public String getPostcodeDistrict()
 	{
 		return this.postcodeDistrict;
-	}
-	
-	public String getTown()
-	{
-		return this.town;
 	}
 }

@@ -1,5 +1,15 @@
-package mapper;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
+package mapper;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 /**
  * The SQLBuilder class serves to abstract the unnecessary work in creating a 
  * SQL Statement. 
@@ -21,13 +31,9 @@ package mapper;
  * 
  * Look at the main function for examples of uses.
  * 
- * @author Salman Khalifa
+ * @author skas
+ * @version 1.0
  */
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 public class SQLBuilder {
     public static final byte LOGIC  = 0;
     public static final byte COLUMN = 1;
@@ -68,6 +74,33 @@ public class SQLBuilder {
        qBlocks.add(block);
     }
     
+    /**
+     * The 'Q' function is used to construct logical queries, taking into account
+     * logical operators.
+     * 
+     *      ie: new SQLBuilder("username","=","vj")
+     *                      .Q("AND","age",">=", "18");
+     * 
+     * @param logic
+     * @param column
+     * @param compr
+     * @param b
+     * @return SQLBuilder
+     */
+    
+    public SQLBuilder SET(String column, String compr, String b)
+    {
+        String [] block = new String[SIZE];
+        
+        block[LOGIC]  = ",";
+        block[COLUMN] = column;
+        block[COMPR]  = compr;
+        block[VALUE]  = b;
+        
+        qBlocks.add(block);
+        return this;
+    }
+    
     public SQLBuilder AND(String column, String compr, String value)
     {
         String [] block = new String[SIZE];
@@ -79,6 +112,36 @@ public class SQLBuilder {
         
         qBlocks.add(block);
         return this;
+    } 
+    public SQLBuilder OR(String column, String compr, String value)
+    {
+        String [] block = new String[SIZE];
+        
+        block[LOGIC]  = "OR";
+        block[COLUMN] = column;
+        block[COMPR]  = compr;
+        block[VALUE]  = value;
+        
+        qBlocks.add(block);
+        return this;
+    } 
+    
+    //Formats Query, Taking into account the passed, SELECT * from table
+    public String PreparedStatementWhere(String query)
+    {
+        for(String[] qBlock : this.qBlocks)
+        {
+            query +=" "+qBlock[LOGIC]+" "+qBlock[COLUMN]+" "+qBlock[COMPR]+" "+"?";
+        }
+        return query;
+    }
+    public String toPreparedStatement(String query)
+    {
+      for(String[] qBlock : this.qBlocks)
+        {
+            query +=" "+qBlock[LOGIC]+" "+qBlock[COLUMN]+" "+qBlock[COMPR]+" "+"?";
+        }  
+      return query;
     }
     
     //Executes A statement, returning a result set. Check JDBC Documentation for
@@ -95,19 +158,7 @@ public class SQLBuilder {
         System.out.println(pS);
         return pS.executeQuery();
         
-    } 
-    public SQLBuilder OR(String column, String compr, String value)
-    {
-        String [] block = new String[SIZE];
-        
-        block[LOGIC]  = "OR";
-        block[COLUMN] = column;
-        block[COMPR]  = compr;
-        block[VALUE]  = value;
-        
-        qBlocks.add(block);
-        return this;
-    } 
+    }
     
     public void prepare(PreparedStatement pS) throws SQLException
     {
@@ -124,50 +175,5 @@ public class SQLBuilder {
         query = PreparedStatementWhere(query);
         
         return executeStatement(dbConn, query);
-    }
-    
-    //Formats Query, Taking into account the passed, SELECT * from table
-    public String PreparedStatementWhere(String query)
-    {
-        for(String[] qBlock : this.qBlocks)
-        {
-            query +=" "+qBlock[LOGIC]+" "+qBlock[COLUMN]+" "+qBlock[COMPR]+" "+"?";
-        }
-        return query;
-    }
-    
-    /**
-     * The 'Q' function is used to construct logical queries, taking into account
-     * logical operators.
-     * 
-     *      ie: new SQLBuilder("username","=","vj")
-     *                      .Q("AND","age",">=", "18");
-     * 
-     * @param logic
-     * @param column
-     * @param compr
-     * @param value
-     * @return SQLBuilder
-     */
-    
-    public SQLBuilder SET(String column, String compr, String value)
-    {
-        String [] block = new String[SIZE];
-        
-        block[LOGIC]  = ",";
-        block[COLUMN] = column;
-        block[COMPR]  = compr;
-        block[VALUE]  = value;
-        
-        qBlocks.add(block);
-        return this;
-    }
-    public String toPreparedStatement(String query)
-    {
-      for(String[] qBlock : this.qBlocks)
-        {
-            query +=" "+qBlock[LOGIC]+" "+qBlock[COLUMN]+" "+qBlock[COMPR]+" "+"?";
-        }  
-      return query;
     }
 }

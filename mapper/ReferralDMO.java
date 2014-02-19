@@ -7,9 +7,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -33,6 +31,18 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>{
         return instance;
     }  
    
+   //Returns a Set of all Referrals
+  //getAll
+    public Set<ReferralObject> getAll() {
+        return getAllByProperties(new SQLBuilder());
+    }
+    //getById 
+    //Returns a Referral object that relates to the id
+    public ReferralObject getById(int id)
+    {
+        return this.getByProperties(new SQLBuilder("id", "=", ""+id));
+    }
+    
     //getByProperties
     //Returns the first Referral object matching the criteria
     public ReferralObject getByProperties(SQLBuilder query){
@@ -55,8 +65,8 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>{
         
     //getAllByProperties
     //Returns a Set of Referrals that match the given criteria
-    public List<ReferralObject> getAllByProperties(SQLBuilder query){
-          List<ReferralObject> Referral = new ArrayList<>();
+    public Set<ReferralObject> getAllByProperties(SQLBuilder query){
+          Set<ReferralObject> Referral = new HashSet<>();
           
           try 
           {            
@@ -97,6 +107,26 @@ public class ReferralDMO extends GPSISDataMapper<ReferralObject>{
 		return null;
     }
     
+    //Remove a Referral from the database given its Id
+    //removeById
+    public void removeById(int id){
+        try 
+        {
+            removeByProperty(new SQLBuilder("id","=",""+id));
+        } 
+        catch (SQLException e) 
+        {
+        	System.err.println(e.getMessage());
+        }
+    }
+   
+    //WARNING: Removes all Referrals from the database that match the given criteria
+    //removeByProperty
+    public void removeByProperty(SQLBuilder query) throws SQLException 
+    {
+        GPSISDataMapper.removeByPropertyHelper(query, this.tableName);        
+    }
+
     //put
     //Put a given Referral object onto the Database. Used for INSERT and UPDATE
     public void put(ReferralObject o){

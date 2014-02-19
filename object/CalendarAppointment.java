@@ -1,10 +1,10 @@
 package object;
  
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import framework.GPSISObject;
+import mapper.CalendarAppointmentDMO;
+ 
+import java.util.Date;
+import java.util.Calendar;
  
  
 public class CalendarAppointment extends GPSISObject 
@@ -14,9 +14,7 @@ public class CalendarAppointment extends GPSISObject
  
         public CalendarAppointment(int id, java.util.Date sT, java.util.Date eT) // constructor 1 - already exists in database
         { 
-            this.id = id;    
-            this.startTime = sT;
-            this.endTime = eT;
+            this.id = id;         
         }
  
         public CalendarAppointment(java.util.Date sT, java.util.Date eT) // constructor 2 - insert into database
@@ -28,7 +26,27 @@ public class CalendarAppointment extends GPSISObject
         }
          
          
-        /*
+        public Date getStartTime()
+        {
+            return this.startTime;
+        }
+         
+         
+        public Date getEndTime()
+        {
+            return this.endTime;
+        }
+         
+        public boolean isRoutine()
+        {
+            if((this.endTime.getTime() - this.startTime.getTime()) == 15*60*1000)
+                return true;
+            else
+                return false;
+        }
+         
+ 
+/*
  * 
  * Actually, it makes more sense to create new RoutineAppointments and new CareManagementAppointments
  * than creating a CalendarAppointment...
@@ -46,27 +64,6 @@ public class CalendarAppointment extends GPSISObject
         public void determineTrainingDays(){ //this method should only be available for Office Managers
             // check if the logged in user is an Office Manager
  
-        }
-         
-         
-        public Date getEndTime()
-        {
-            return this.endTime;
-        }
-
-         
-        public Date getStartTime()
-        {
-            return this.startTime;
-        }
-         
- 
-        public boolean isRoutine()
-        {
-            if(this instanceof RoutineAppointment)
-                return true;
-            else
-                return false;
         }
  
         public void WriteAppointmentSummary(){ // doctors are supposed to write a summary of an appointment so that appointment history is available for each patient

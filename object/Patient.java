@@ -5,9 +5,8 @@
  */
 
 package object;
-import java.sql.Date;
-
 import framework.GPSISObject;
+import java.sql.Date;
 /**
  *
  * @author skas
@@ -68,13 +67,13 @@ public class Patient extends GPSISObject{
         this.doctor = null;
     }
     
-    public String getAddress()
+    public void setIsPermenant(boolean value)
     {
-        return this.address;
+        isPermanent = value;
     }
-    public Date getDob()
+    public boolean getIsPermenant()
     {
-        return this.dob;
+        return isPermanent;
     }
     
     public String getFirstName()
@@ -82,25 +81,9 @@ public class Patient extends GPSISObject{
         return this.firstName;
     }
     
-    public boolean getIsPermenant()
-    {
-        return isPermanent;
-    }
-    
     public String getLastName()
     {
         return this.lastName;
-    }
-    
-
-    public String getPhone()
-    {
-        return this.phone;
-    }
-    
-    public String getPostCode()
-    {
-        return this.postCode;
     }
     
     public char getSex()
@@ -108,9 +91,25 @@ public class Patient extends GPSISObject{
         return this.sex;
     }
     
-    public void setIsPermenant(boolean value)
+
+    public Date getDob()
     {
-        isPermanent = value;
+        return this.dob;
+    }
+    
+    public String getPostCode()
+    {
+        return this.postCode;
+    }
+    
+    public String getAddress()
+    {
+        return this.address;
+    }
+    
+    public String getPhone()
+    {
+        return this.phone;
     }
     
     
