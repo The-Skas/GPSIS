@@ -8,7 +8,7 @@ public class Speciality extends GPSISObject {
 	public Speciality (String n, String d)
 	{
 		this.name = n;
-		specialityDMO.put(this);
+		//specialityDMO.put(this);
 	}
 	
 	public Speciality (int id, String n, String d)

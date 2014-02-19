@@ -1,10 +1,12 @@
 package module.Referral;
-import java.awt.*;
+
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.EOFException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ import object.ConsultantObject;
 import object.InvoiceObject;
 import object.PaymentObject;
 import object.ReferralObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 
@@ -70,14 +73,21 @@ public class DetailsReferral extends JFrame {
 		//Is paid or not
 		InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		Set<InvoiceObject> set1 = invoiceDMO.getAll();
-		for(InvoiceObject x: set1){
-			if(Integer.parseInt(searchValue)==x.getRefID()){
-				if(x.getIsPaid()==1){
-					lab6.setText("PAID");
+		List<InvoiceObject> set1;
+		try {
+			set1 = invoiceDMO.getAll();
+			for(InvoiceObject x: set1){
+				if(Integer.parseInt(searchValue)==x.getRefID()){
+					if(x.getIsPaid()==1){
+						lab6.setText("PAID");
+					}
 				}
 			}
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
 		
 		ReferralDMO referralDMO = ReferralDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
@@ -94,22 +104,30 @@ public class DetailsReferral extends JFrame {
 		//Connect to database
 		GPSISDataMapper.connectToDatabase();
 		//Make a set and store all the payment objects in it
-		Set<PaymentObject> payObj = paymentDMO.getAll();
-		String temp = "";
-		int num = Integer.parseInt(searchValue);
-		System.out.println("FOUND SEARCHVALUE REFID");
-		//Enhanced for loop iterating through payment objects stored in the set
-		but4 = new JButton("Make Payment");
-		but4.addActionListener(e);
-		int counter = 0;
-		for(PaymentObject x:payObj){
-			if((num == x.getRefID())){
-				//If payment has a reference number then set text-field to found payment id
-				temp = "" + x.getId();
-				a5.setText(temp);
-				a5.setEditable(false);
+		List<PaymentObject> payObj;
+		try {
+			payObj = paymentDMO.getAll();
+			int num = Integer.parseInt(searchValue);
+			System.out.println("FOUND SEARCHVALUE REFID");
+			//Enhanced for loop iterating through payment objects stored in the set
+			but4 = new JButton("Make Payment");
+			but4.addActionListener(e);
+			int counter = 0;
+			String temp = "";
+			for(PaymentObject x:payObj){
+				if((num == x.getRefID())){
+					//If payment has a reference number then set text-field to found payment id
+					temp = "" + x.getId();
+					a5.setText(temp);
+					a5.setEditable(false);
+				}
 			}
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
+		
 		if(a5.getText().trim().length()==0){
 				add(but4);
 		}

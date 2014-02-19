@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -37,7 +38,7 @@ public class Payment extends JFrame {
 	public Payment(int refid, int conid){
 		ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		Set<ConsultantObject> s = consultantDMO.getAll();
+		List<ConsultantObject> s = consultantDMO.getAll();
 		for(ConsultantObject x: s){
 			if(x.getId()==conid){
 				price = x.getPrice();

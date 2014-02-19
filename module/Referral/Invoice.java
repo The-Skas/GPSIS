@@ -15,6 +15,7 @@ import javax.swing.*;
 
 import object.InvoiceObject;
 import object.ReferralObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 import mapper.InvoiceDMO;
 import mapper.ReferralDMO;
@@ -37,7 +38,12 @@ public class Invoice extends JFrame {
 		this.id = Integer.parseInt(id);
 		InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		InvoiceObject inv = invoiceDMO.getById(this.id);
+		try {
+			InvoiceObject inv = invoiceDMO.getById(this.id);
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		System.out.print(refID);
 		lab1 = new JLabel("          Invoice ID: ");
 		add(lab1);

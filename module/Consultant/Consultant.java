@@ -1,8 +1,11 @@
 package module.Consultant;
 import java.awt.FlowLayout;
+
 import object.SpecialityTypeObject;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -13,6 +16,7 @@ import mapper.SpecialityTypeDMO;
 import module.Referral.AddSpecialistType;
 import object.ConsultantObject;
 import object.SpecialityTypeObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class Consultant extends JFrame{
@@ -81,12 +85,19 @@ public class Consultant extends JFrame{
 		String spec = "";
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		Set<SpecialityTypeObject> tempset = specialityTypeDMO.getAll();
-		for(SpecialityTypeObject x:tempset){
-			if(ID == x.getConID()){
-				spec += x.getName() + ", ";
+		List<SpecialityTypeObject> tempset;
+		try {
+			tempset = specialityTypeDMO.getAll();
+			for(SpecialityTypeObject x:tempset){
+				if(ID == x.getConID()){
+					spec += x.getName() + ", ";
+				}
 			}
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
 		jb9.setText(spec);
 		jb9.setEditable(false);
 		

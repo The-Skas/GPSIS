@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import mapper.PaymentDMO;
 import mapper.ReferralDMO;
 import mapper.SpecialityTypeDMO;
 import object.*;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class MakeReferral extends JFrame {
@@ -40,12 +42,19 @@ public class MakeReferral extends JFrame {
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
 		SpecialityTypeObject r = new SpecialityTypeObject();
-		Set<SpecialityTypeObject> set1  = specialityTypeDMO.getAll();
-		//Using enhanced for loop to add just names not the whole object (for the dropdown list)
-		//Added to an array-list as its an unknown size(cant use an array)
-		for(SpecialityTypeObject x:set1){
-			choicesA.add(x.getName());
+		List<SpecialityTypeObject> set1;
+		try {
+			set1 = specialityTypeDMO.getAll();
+			//Using enhanced for loop to add just names not the whole object (for the dropdown list)
+			//Added to an array-list as its an unknown size(cant use an array)
+			for(SpecialityTypeObject x:set1){
+				choicesA.add(x.getName());
+			}
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		
 		//taking out duplicate entry's by putting them into a hash-set 
 		HashSet hset = new HashSet();
 		//Add all of array-list
@@ -115,7 +124,7 @@ public class MakeReferral extends JFrame {
 						SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 						GPSISDataMapper.connectToDatabase();
 						SpecialityTypeObject r2 = new SpecialityTypeObject();
-						Set<SpecialityTypeObject> set1  = specialityTypeDMO.getAll();
+						List<SpecialityTypeObject> set1  = specialityTypeDMO.getAll();
 						//Enhanced for loop iterating through the set returned from the database
 						for(SpecialityTypeObject x: set1){
 							if(x.getName().equals(select)){

@@ -6,52 +6,92 @@ package object;
  */
 
 
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import mapper.SQLBuilder;
+
+import org.apache.commons.codec.binary.Base64;
+
+import exception.DuplicateEntryException;
 import exception.EmptyResultSetException;
 import framework.GPSISObject;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
-
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Calendar;
-
 public abstract class StaffMember extends GPSISObject {
-	protected String username;
-	private byte[] encryptedPassword;
+	private String username;
+	private String encryptedPassword;
+	private String firstName;
+	private String lastName;
+	private boolean fullTime;
+	private boolean officeManager;
+	private String role;
 	
-	protected String firstName;
-	protected String lastName;
-	protected boolean fullTime;
-	protected boolean officeManager;
-	protected String role;
-	protected int holidayAllowance;
-	
-	protected Calendar startDate;
-	protected Calendar endDate = null; // null if not temporary
+	private int holidayAllowance;
+	private Date startDate;
 
-	protected Set<Date> holidays;
-	protected Set<Date> absences;
-	protected Set<Date> unavailables;
+	private Date endDate = null; // null if not temporary	
 	protected Set<TaxForm> taxForms;
 	
+	// the Key to use when Encrypting and Decrypting
+	static byte[] key = "20vPmHsKoAmSsA14".getBytes(); // needed 16 bytes, here's a combo of our Initials and the current year :D
+	
+	// A Salt to be used in conjunction with the Key
+	static IvParameterSpec salt = new IvParameterSpec(key);
 	public static final String RECEPTIONIST = "Receptionist";
 	public static final String DOCTOR = "Doctor";
+	
 	public static final String NURSE = "Nurse";
 	
-	// already exists in Database
-	protected StaffMember(int id, String u, byte[] p, String fN, String lN, boolean fT, Calendar sD, boolean oM, String r, int hA)
+	/** doHash
+	 * Hashes a given String using AES and the static Key set in this class
+	 * @param p the String to be hashed
+	 * @return
+	 */
+	private static String doHash(String p) {
+		try 
+	    {
+			SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+			Cipher c = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+			c.init(Cipher.ENCRYPT_MODE, skeySpec, salt);
+			byte[] eP = c.doFinal(p.getBytes());
+			return Base64.encodeBase64String(eP);
+	    } 
+		catch (Exception ex) 
+		{
+			ex.printStackTrace();
+	    }
+	    return null;
+	}
+	
+	/** public accessor to do the private method in which we hash a String
+	 * 
+	 * @param p the String to hash
+	 * @return a byte array of the hashed String
+	 */
+	public static String encrypt(String p)
+	{
+		return doHash(p);
+	}
+	
+	/** StaffMember Constructor
+	 * This Constructor is used when retrieving Staff Member objects from the Database
+	 * @param id The id column from the database
+	 * @param u	 The username column from the database
+	 * @param p  The enc_password column from the database
+	 * @param fN The first_name column from the database
+	 * @param lN The last_name column from the database
+	 * @param fT The full_time column from the database
+	 * @param sD The start_date column from the database
+	 * @param oM The office_manager column from the database
+	 * @param r  The role column from the database
+	 * @param hA The holiday_allowance column from the database
+	 */
+	protected StaffMember(int id, String u, String p, String fN, String lN, boolean fT, Date sD, boolean oM, String r, int hA)
 	{
 		this.id = id;
 		this.username = u;
@@ -65,20 +105,88 @@ public abstract class StaffMember extends GPSISObject {
 		this.holidayAllowance = hA;
 	}
 	
-	// insert into database
-	protected StaffMember(String u, String p, String fN, String lN, boolean fT, Calendar sD, boolean oM, String r, int hA)
+	/** StaffMember Constructor
+	 * This Constructor is used when creating a New Staff Member object
+	 * @param u  the username for the new Staff Member
+	 * @param p  the password for the new Staff Member
+	 * @param fN the First Name of the new Staff Member
+	 * @param lN the Last Name of the new Staff Member
+	 * @param fT if the New Staff Member is working Full Time
+	 * @param sD when the New Staff Member starts working
+	 * @param oM if the New Staff Member is an Office Manager
+	 * @param r  the Role that the New Staff Member has
+	 * @param hA the amount of holiday the Staff Member has yearly
+	 */
+	protected StaffMember(String u, String p, String fN, String lN, boolean fT, Date sD, boolean oM, String r, int hA) throws DuplicateEntryException
 	{
-		this.username = u;
-		this.encryptedPassword = doHash(p);
-		this.firstName = fN;
-		this.lastName = lN;
-		this.fullTime = fT;
-		this.startDate = sD;
-		this.officeManager = oM;
-		this.role = r;
-		this.holidayAllowance = hA;		
+		// check for duplicates in StaffMember table
+		SQLBuilder sql = new SQLBuilder("username", "=", u);
+		try 
+		{
+			staffMemberDMO.getByProperties(sql);
+			throw new DuplicateEntryException();
+		} 
+		catch (EmptyResultSetException e) // if there's an Empty Result Set, this username is not taken
+		{ 
+			this.username = u;
+			this.encryptedPassword = doHash(p);
+			this.firstName = fN;
+			this.lastName = lN;
+			this.fullTime = fT;
+			this.startDate = sD;
+			this.officeManager = oM;
+			this.role = r;
+			this.holidayAllowance = hA;		
+			
+			staffMemberDMO.put(this);
+		}
 		
-		staffMemberDMO.put(this);
+	}
+	
+	/**
+	 * 
+	 */
+	public void addHoliday()
+	{
+		// TODO
+	}
+	
+	/** getAbsences
+	 * returns all of the Dates that this Staff Member has been absent
+	 * @return a Set of Dates that this Staff Member has been absent for
+	 * @throws EmptyResultSetException 
+	 */
+	public List<Date> getAbsences() throws EmptyResultSetException
+	{
+
+		return staffMemberDMO.getAbsences(this);
+	}
+	
+	/** getAllHolidays
+	 * returns all of the Dates that this Staff Member has booked for a holiday
+	 * @return a Set of Dates that the Staff Member has booked as Holiday
+	 * @throws EmptyResultSetException 
+	 */
+	public List<Date> getHolidays() throws EmptyResultSetException
+	{
+		return staffMemberDMO.getHolidays(this);
+	}
+	
+	/** getEncryptedPassword
+	 * returns the encrypted password as an array of bytes, to convert to String, use new String(sM.getEncryptedPassword());
+	 * @return the encrypted password as an array of bytes
+	 */
+	public String getEncryptedPassword()
+	{
+		return this.encryptedPassword;
+	}
+	
+	/** getEndDate
+	 * 
+	 */
+	public Date getEndDate()
+	{
+		return this.endDate;
 	}
 	
 	/** getFirstName
@@ -90,6 +198,28 @@ public abstract class StaffMember extends GPSISObject {
 		return this.firstName;
 	}
 	
+	/** getHolidayAllowance
+	 * returns an integer representing the total amount of holiday the Staff Member is allocated
+	 * @return the amount of holiday allocated yearly to the Staff Member
+	 */
+	public int getHolidayAllowance()
+	{
+		return this.holidayAllowance;
+	}
+
+	/** getHolidayLeft
+	 * returns the amount of holiday the Staff Member has left by subtracting the holidays booked for this year
+	 * @return the amount of holiday the Staff Member has left
+	 */
+	public int getHolidayLeft()
+	{
+		try {
+			return this.holidayAllowance - this.getHolidays().size();
+		} catch (EmptyResultSetException e) {
+			return this.holidayAllowance;
+		}
+	}
+	
 	/** getLastName
 	 * returns the Last Name of the Staff Member
 	 * @return a string representation of the Staff Member's last name
@@ -97,15 +227,6 @@ public abstract class StaffMember extends GPSISObject {
 	public String getLastName()
 	{
 		return this.lastName;
-	}
-	
-	/** getUsername
-	 * returns the username for the Staff Member
-	 * @return a string representation of the Staff Member's username
-	 */
-	public String getUsername()
-	{
-		return this.username;
 	}
 	
 	/** getRole
@@ -117,9 +238,18 @@ public abstract class StaffMember extends GPSISObject {
 		return this.role;
 	}
 	
-	public Calendar getStartDate()
+	public Date getStartDate()
 	{
 		return this.startDate;
+	}
+	
+	/** getUsername
+	 * returns the username for the Staff Member
+	 * @return a string representation of the Staff Member's username
+	 */
+	public String getUsername()
+	{
+		return this.username;
 	}
 	
 	/** isAvailable
@@ -127,90 +257,7 @@ public abstract class StaffMember extends GPSISObject {
 	 * @param c
 	 * @return
 	 */
-	public abstract boolean isAvailable(Date c);
-	
-	
-	/** getHolidayAllowance
-	 * returns an integer representing the total amount of holiday the Staff Member is allocated
-	 * @return the amount of holiday allocated yearly to the Staff Member
-	 */
-	public int getHolidayAllowance()
-	{
-		return this.holidayAllowance;
-	}
-	
-	/** getHolidayLeft
-	 * returns the amount of holiday the Staff Member has left by subtracting the holidays booked for this year
-	 * @return the amount of holiday the Staff Member has left
-	 */
-	public int getHolidayLeft()
-	{
-		return this.holidayAllowance - holidays.size();
-	}
-	
-	/** getAllHolidays
-	 * returns all of the Dates that this Staff Member has booked for a holiday
-	 * @return a Set of Dates that the Staff Member has booked as Holiday
-	 * @throws EmptyResultSetException 
-	 */
-	public Set<Date> getAllHolidays() throws EmptyResultSetException
-	{
-		if (this.holidays != null)
-			return this.holidays;
-		else
-		{
-			return staffMemberDMO.getAllHolidays(this);
-		}
-	}
-	
-	/** getCurrentYearHolidays
-	 * returns all of the Dates that this Staff Member has booked for a holiday this year
-	 * @return a Set of Dates that this Staff Member has booked for a holiday this year
-	 */
-	public Set<Date> getCurrentYearHolidays()
-	{
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, c.get(Calendar.YEAR) - 1);
-		Date oneYearAgo = c.getTime();
-		Set<Date> result = new HashSet<Date>();
-		for (Date d : this.holidays)
-		{
-			if (d.getTime() > oneYearAgo.getTime()) // if the date is between NOW and 1 Year Ago
-			{
-				result.add(d);
-			}
-		}
-		
-		// only return a Set if there are results inside
-		if (!result.isEmpty())
-			return result;
-		else
-			return null;
-	}
-	
-	/** getAbsences
-	 * returns all of the Dates that this Staff Member has been absent
-	 * @return a Set of Dates that this Staff Member has been absent for
-	 * @throws EmptyResultSetException 
-	 */
-	public Set<Date> getAbsences() throws EmptyResultSetException
-	{
-		if (this.absences != null)
-			return this.absences;
-		else
-		{
-			return staffMemberDMO.getAbsences(this);
-		}
-	}
-
-	/** isOfficeManager
-	 * returns whether or not this Staff Member is an Office Manager or not
-	 * @return true if this Staff Member is an Office Manager, false otherwise
-	 */
-	public boolean isOfficeManager()
-	{
-		return this.officeManager;
-	}
+	//public abstract boolean isAvailable(Date c);
 	
 	/** isDoctor
 	 * returns whether or not this Staff Member is a Doctor or not
@@ -220,6 +267,14 @@ public abstract class StaffMember extends GPSISObject {
 	{
 		return this.role.equals("Doctor");
 	}
+	/** isFullTime()
+	 * returns whether or not the Staff Member is working full time
+	 * @return true if the Staff Member is working full time, false otherwise
+	 */
+	public boolean isFullTime()
+	{
+		return this.fullTime;
+	}
 	
 	/** isNurse
 	 * returns whether or not this Staff Member is a Nurse or not
@@ -228,6 +283,24 @@ public abstract class StaffMember extends GPSISObject {
 	public boolean isNurse()
 	{
 		return this.role.equals("Nurse");
+	}
+	
+	/** isOfficeManager
+	 * returns whether or not this Staff Member is an Office Manager or not
+	 * @return true if this Staff Member is an Office Manager, false otherwise
+	 */
+	public boolean isOfficeManager()
+	{
+		return this.officeManager;
+	}
+	
+	/** isPartTime()
+	 * returns whether or not the Staff Member is working part time
+	 * @return true if the Staff Member is working part time, false otherwise
+	 */
+	public boolean isPartTime()
+	{
+		return !this.fullTime;
 	}
 	
 	/** isReceptionist
@@ -243,19 +316,19 @@ public abstract class StaffMember extends GPSISObject {
 	 * returns whether or not this Staff Member is a Temporary Staff Member
 	 * @return true if this Staff Member is a Temporary Staff Member, false otherwise
 	 */
-	public boolean isTemp()
+	public boolean isTemporary()
 	{
 		return this.endDate != null;
 	}
 	
-	/** makeTemporary
-	 * makes this Staff Member temporary by giving them an End Date
-	 * @param eD the End Date of the Contract
+	/** register
+	 * registers this Staff Member on the Database
 	 */
-	public void makeTemporary(Calendar eD)
+	public void register()
 	{
-		this.endDate = eD;
+		staffMemberDMO.register(this);
 	}
+	
 	
 	/** setPassword
 	 * set the password for the Staff Member given by a String
@@ -275,110 +348,64 @@ public abstract class StaffMember extends GPSISObject {
 		this.role = r;
 	}
 	
-	/** getEncryptedPassword
-	 * returns the encrypted password as an array of bytes, to convert to String, use new String(sM.getEncryptedPassword());
-	 * @return the encrypted password as an array of bytes
+	/** makeTemporary
+	 * makes this Staff Member temporary by giving them an End Date
+	 * @param eD the End Date of the Contract
 	 */
-	public byte[] getEncryptedPassword()
+	public void setTemporary(Date eD)
 	{
-		return this.encryptedPassword;
+		this.endDate = eD;
+		staffMemberDMO.setTemporary(this);
 	}
-	
-	/** isFullTime()
-	 * returns whether or not the Staff Member is working full time
-	 * @return true if the Staff Member is working full time, false otherwise
-	 */
-	public boolean isFullTime()
-	{
-		return this.fullTime;
-	}
-	
-	/** isPartTime()
-	 * returns whether or not the Staff Member is working part time
-	 * @return true if the Staff Member is working part time, false otherwise
-	 */
-	public boolean isPartTime()
-	{
-		return !this.fullTime;
-	}
-	
-	/**
-	 * 
-	 */
-	public void register()
-	{
-		
-	}
-	
-	/**
-	 * 
-	 */
-	public void addHoliday()
-	{
-		
-	}
-	
-	
-	/** public accessor to do the private method in which we hash a String
-	 * 
-	 * @param p the String to hash
-	 * @return a byte array of the hashed String
-	 */
-	public static byte[] encrypt(String p)
-	{
-		return doHash(p);
-	}
-	
-	/** doHash
-	 * this where all of the magic Hashing works. The String is hashed using a secret Pass Phrase with MD5 and DES
-	 * @param p the String to hash
-	 * @return a byte array of the hashed string
-	 */
-	private static byte[] doHash(String p)
-	{
-		String passphrase = "qwerty"; // will change before final implementation
-		byte[] salt = { (byte)0xc7, (byte)0x73, (byte)0x21, (byte)0x8c, (byte)0x7e, (byte)0xc8, (byte)0xee, (byte)0x99 };
-		PBEParameterSpec pbeParamSpec = new PBEParameterSpec(salt, 20);
-		
-		// generate key with pass phrase
-		PBEKeySpec pbeKeySpec = new PBEKeySpec(passphrase.toCharArray()); 
-		
-		try {
 
-			SecretKeyFactory keyFac = SecretKeyFactory.getInstance("PBEWithMD5AndDES");
-			SecretKey pbeKey = keyFac.generateSecret(pbeKeySpec);
-			
-			// Create the Cipher
-			Cipher pbeCipher = Cipher.getInstance("PBEWithMD5AndDES");
-			
-			// Initialise with key and parameters
-			pbeCipher.init(Cipher.ENCRYPT_MODE, pbeKey, pbeParamSpec);
-			
+	/** setFirstName
+	 * @param firstName
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-			byte[] eP = pbeCipher.doFinal(p.getBytes());
-			
+	/** setLastName
+	 * @param lastName
+	 */
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-			System.out.println("Encrypted String: " + eP);
-			
-			return eP;
-			
-			
-		} catch (InvalidKeySpecException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
+	/** setOfficeManager
+	 * @param officeManager the officeManager to set
+	 */
+	public void setOfficeManager(boolean officeManager) {
+		this.officeManager = officeManager;
+	}
+
+	/** setHolidayAllowance
+	 * @param holidayAllowance the holidayAllowance to set
+	 */
+	public void setHolidayAllowance(int holidayAllowance) {
+		this.holidayAllowance = holidayAllowance;
+	}
+	
+	/** decrypt 
+	 * This method should never be used in Practice. 
+	 * and only compare encrypted passwords.
+	 * @param eP a pre-hashed String to be de-hashed.
+	 * @return
+	 *
+	public static String decrypt(String eP) {
+		try 
+		{
+			SecretKeySpec skeySpec = new SecretKeySpec(key, "AES");
+			Cipher c = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+			c.init(Cipher.DECRYPT_MODE, skeySpec, salt);
+			byte[] dP = c.doFinal(Base64.decodeBase64(eP));
+			return new String(dP);
+		}
+		catch (Exception ex)
+		{
+		    ex.printStackTrace();
 		}
 		return null;
-	}
+	}*/
 	
 }

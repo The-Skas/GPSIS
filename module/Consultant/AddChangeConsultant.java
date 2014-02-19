@@ -2,6 +2,7 @@ package module.Consultant;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -83,7 +84,7 @@ public class AddChangeConsultant extends JFrame {
 		
 		ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		Set<ConsultantObject> se = consultantDMO.getAll();
+		List<ConsultantObject> se = consultantDMO.getAll();
 		
 		for(ConsultantObject x:se){
 		System.out.print(x.getId());

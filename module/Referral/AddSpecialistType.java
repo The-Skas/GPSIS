@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ import mapper.ConsultantDMO;
 import mapper.SpecialityTypeDMO;
 import object.ConsultantObject;
 import object.SpecialityTypeObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class AddSpecialistType extends JFrame {
@@ -25,7 +27,7 @@ public class AddSpecialistType extends JFrame {
 	private String[] array;
 	private JCheckBox jc,jc2;
 	private int check = 0;
-	private Set<SpecialityTypeObject> set1;
+	private List<SpecialityTypeObject> set1;
 	private int ID;
 	
 	public AddSpecialistType(int ID){
@@ -37,7 +39,12 @@ public class AddSpecialistType extends JFrame {
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
 		SpecialityTypeObject r = new SpecialityTypeObject();
-		set1 = specialityTypeDMO.getAll();
+		try {
+			set1 = specialityTypeDMO.getAll();
+		} catch (EmptyResultSetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		for(SpecialityTypeObject x:set1){
 			arr1.add(x.getName());
 		}

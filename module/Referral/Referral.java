@@ -22,6 +22,7 @@ import object.ConsultantObject;
 import object.InvoiceObject;
 import object.ReferralObject;
 import object.SpecialityTypeObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class Referral extends JFrame {
@@ -131,6 +132,9 @@ public class Referral extends JFrame {
 								//Pop-up message
 								JOptionPane.showMessageDialog(null, "ERROR");
 								eee.printStackTrace();
+							} catch (EmptyResultSetException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
 							}
 					}
 				}

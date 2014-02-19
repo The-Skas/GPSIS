@@ -1,58 +1,48 @@
 package mapper;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import framework.GPSISDataMapper;
 import object.CareProgramme;
+import framework.GPSISDataMapper;
 
 public class CareProgrammeDMO extends GPSISDataMapper<CareProgramme> {
-        private CareProgrammeDMO(){};
+        private static CareProgrammeDMO instance;;
     
-        private static CareProgrammeDMO instance;
-
         public static CareProgrammeDMO getInstance() 
         {
             if(instance == null)
             {
-                instance = new CareProgrammeDMO();
+                instance = new CareProgrammeDMO("CareProgramme");
             }
             return instance;
         }
-	@Override
-	public Set<CareProgramme> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+        private CareProgrammeDMO(String tableName){
+        	this.tableName = tableName;
+        }
 
 	@Override
-	public CareProgramme getById(int id) {
+	public List<CareProgramme> getAllByProperties(SQLBuilder query) {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public void removeById(int id) {
-		// TODO Auto-generated method stub
-		
+		List<CareProgramme> cps = new ArrayList<CareProgramme>();
+		cps.add(new CareProgramme());
+		return cps;
 	}
         
+	@Override
+	public CareProgramme getByProperties(SQLBuilder query) {
+		// TODO Auto-generated method stub
+		CareProgramme cp = new CareProgramme();
+		return cp.getTempCP();
+	}
+
 	@Override
 	public void put(CareProgramme o) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public CareProgramme getByProperties(SQLBuilder query) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<CareProgramme> getAllByProperties(SQLBuilder query) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

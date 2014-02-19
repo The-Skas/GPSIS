@@ -10,7 +10,9 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -37,18 +39,6 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
         return instance;
     }
    
-    //return a Set of all Invoices
-    //getAll
-    public Set<InvoiceObject> getAll(){
-        return getAllByProperties(new SQLBuilder());
-    }
-  
-    //returns an Invoice object that relates to the id
-    //getById
-    public InvoiceObject getById(int id) {
-        return this.getByProperties(new SQLBuilder("id", "=", ""+id));
-    }
-
     //return the first Invoice object in the ResultSet
     //getByProperties
     public InvoiceObject getByProperties(SQLBuilder query){
@@ -69,9 +59,9 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
     
     //returns a Set of Invoices that match the given criteria
     //getAllByProperties
-    public Set<InvoiceObject> getAllByProperties(SQLBuilder query) 
+    public List<InvoiceObject> getAllByProperties(SQLBuilder query) 
     {
-          Set<InvoiceObject> Invoice = new HashSet<>();
+          List<InvoiceObject> Invoice = new ArrayList<>();
           
           try 
           {            
@@ -112,27 +102,6 @@ public class InvoiceDMO extends GPSISDataMapper<InvoiceObject>
 		return null;
     }
     
-    //Remove an Invoice from the database given its Id
-    //removeById
-    public void removeById(int id) 
-    {
-        try 
-        {
-            removeByProperty(new SQLBuilder("id","=",""+id));
-        } 
-        catch (SQLException e) 
-        {
-        	System.err.println(e.getMessage());
-        }
-    }
-   
-    //Removes all Invoices from the database that match the given criteria
-    //RemoveByProperty
-    public void removeByProperty(SQLBuilder query) throws SQLException 
-    {
-        GPSISDataMapper.removeByPropertyHelper(query, this.tableName);        
-    }
-
     //put
     //Put a given Referral object onto the Database. Similar to the put method in a Map data structure. Used for INSERT and UPDATE
     public void put(InvoiceObject o){

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import mapper.InvoiceDMO;
 import mapper.SpecialityTypeDMO;
 import object.InvoiceObject;
 import object.SpecialityTypeObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 	public class OutStandingInvoice extends JFrame {
@@ -24,18 +26,25 @@ import framework.GPSISDataMapper;
 		private JComboBox combo;
 		private int counter = 0;
 		private String[] arr1;
-		private Set<InvoiceObject> set1;
+		private List<InvoiceObject> set1;
 		
 		public OutStandingInvoice(){
 			setLayout(new FlowLayout());
 			Event e = new Event();
 			 	InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
 				GPSISDataMapper.connectToDatabase();
-				Set<InvoiceObject> set1  = invoiceDMO.getAll();
-				for(InvoiceObject x:set1){
-					System.out.print(x.getIsPaid());
+				List<InvoiceObject> set1;
+				try {
+					set1 = invoiceDMO.getAll();
+					for(InvoiceObject x:set1){
+						System.out.print(x.getIsPaid());
+					}
+					this.set1 = set1;
+				} catch (EmptyResultSetException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				this.set1 = set1;
+				
 			
 			lab8 = new JLabel("Choose ID: ");
 			add(lab8);
