@@ -4,10 +4,18 @@ package module.Referral;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Set;
 
 import javax.swing.*;
 
+import mapper.InvoiceDMO;
+import mapper.SpecialityTypeDMO;
+import object.InvoiceObject;
+import object.SpecialityTypeObject;
+import framework.GPSISDataMapper;
 
 	public class OutStandingInvoice extends JFrame {
 		private JLabel lab1,lab2,lab3,lab4,lab5, lab6, lab7, lab8;
@@ -16,18 +24,22 @@ import javax.swing.*;
 		private JComboBox combo;
 		private int counter = 0;
 		private String[] arr1;
+		private Set<InvoiceObject> set1;
 		
 		public OutStandingInvoice(){
 			setLayout(new FlowLayout());
 			Event e = new Event();
+			 	InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
+				GPSISDataMapper.connectToDatabase();
+				Set<InvoiceObject> set1  = invoiceDMO.getAll();
+				for(InvoiceObject x:set1){
+					System.out.print(x.getIsPaid());
+				}
+				this.set1 = set1;
 			
-			//getOutsIv inherited from dmo
-			arr1 = new String[getOutsInv().size()];
-			for(int i=0; i<getOutsInv().size();i++){
-				arr1[i] = "" + getOutsInv().get(i);
-			}
 			lab8 = new JLabel("Choose ID: ");
 			add(lab8);
+			arr1 = fillArray();
 			combo = new JComboBox(arr1);
 			add(combo);
 			combo.addActionListener(e);
@@ -38,31 +50,54 @@ import javax.swing.*;
 			but7.addActionListener(e);
 			
 		}
-
-		public ArrayList<Integer> getOutsInv() {
-			ArrayList<Integer> array = new ArrayList<Integer>();
-			array.add(1);
-			array.add(2);
-			array.add(3);
-			array.add(4);
-			array.add(5);
-			array.add(6);
-			array.add(7);
-			return array;
-		}
 		
+		public Date addDays(Date d, int days)
+		    {
+		        d.setTime(d.getTime() + days * 1000 * 60 * 60 * 24);
+		        return d;
+		    }
+		public String[] fillArray(){
+			ArrayList<String> arr2 = new ArrayList<String>();
+			//getOutsIv inherited from dmo
+			for(InvoiceObject x: set1){
+				if(x.getIsPaid()==0){//0 = false
+					String temp = ""+x.getId();
+					arr2.add(temp);
+				}
+			}
+			arr1 = new String[arr2.size()];
+			for(int i=0; i<arr2.size();i++){
+				arr1[i] = "" + arr2.get(i);
+			}
+			return arr1;
+		}
+	
 		public class Event implements ActionListener{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource()== but7){
+				if((e.getSource()== but7)&&(arr1.length>=1)){
 				String com = (String) combo.getSelectedItem();
-				Invoice i = new Invoice(com);
-				i.setSize(300, 200);
-				i.setVisible(true);
-				i.setTitle("OutStanding");
+				//com is ID
+				int iden = 0;
+					try{
+						iden = Integer.parseInt(com);
+						InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
+						GPSISDataMapper.connectToDatabase();
+						InvoiceObject obj = invoiceDMO.getById(iden);
+						Invoice i = new Invoice(com,obj.getRefID(),obj.getAmount(),obj.getConID(),obj.getIsPaid());
+						i.setSize(300, 200);
+						i.setVisible(true);
+						i.setTitle("OutStanding");
+						setVisible(false);
+					}catch(Exception ex){
+					JOptionPane.showMessageDialog(null, "Not Correct Data");
+					}
 				}
-				
+				//So if there is no outstanding invoices no exceptions will be thrown
+				else if((e.getSource()== but7)&&(arr1.length<1)){
+					JOptionPane.showMessageDialog(null,  "No outstanding invoices!");
+				}
 			}
 			
 		}

@@ -2,6 +2,7 @@ package module.Consultant;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -56,10 +57,10 @@ public class AddChangeConsultant extends JFrame {
 				int id = 0;
 				
 				try{
+					//Turns String into an int
 					id = Integer.parseInt(jb.getText());
 					ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 					GPSISDataMapper.connectToDatabase();
-					ConsultantObject r = new ConsultantObject();
 					
 					String s = consultantDMO.getById(id).getTitle();
 					Consultant consul = new Consultant(id,consultantDMO.getById(id).getTitle(),consultantDMO.getById(id).getFName(),
@@ -79,6 +80,16 @@ public class AddChangeConsultant extends JFrame {
 		
 	}
 	public static void main(String[] args){
+		
+		ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
+		GPSISDataMapper.connectToDatabase();
+		Set<ConsultantObject> se = consultantDMO.getAll();
+		
+		for(ConsultantObject x:se){
+		System.out.print(x.getId());
+		}
+		
+		
 		AddChangeConsultant a = new AddChangeConsultant();
 		a.setVisible(true);
 		a.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -28,8 +28,7 @@ public class Consultant extends JFrame{
 		setLayout(new FlowLayout());
 		Event e = new Event();
 		
-		this.ID=s;
-		System.out.print(s);
+		this.ID = s;
 		lab1 = new JLabel("Title: ");
 		add(lab1);
 		jb1 = new JTextArea(1,15);
@@ -107,8 +106,6 @@ public class Consultant extends JFrame{
 		butt4 = new JButton("Add Speciality: ");
 		add(butt4);
 		butt4.addActionListener(e);
-
-	
 		
 	}
 	
@@ -158,8 +155,6 @@ public class Consultant extends JFrame{
 		
 		lab7 = new JLabel();
 		add(lab7);
-		
-		
 	}
 	public class Event implements ActionListener{
 
@@ -193,6 +188,8 @@ public class Consultant extends JFrame{
 				ConsultantObject r = new ConsultantObject(jb1.getText(), jb2.getText(), jb3.getText(), jb4.getText(),
 														  jb5.getText(), jb6.getText(), amo);
 				consultantDMO.put(r);
+				//Return messege with added consultants ID
+				JOptionPane.showMessageDialog(null, "Consultant ("+ r.getFName().toUpperCase() + " "+ r.getLName().toUpperCase() + "'s) ID: "+ r.getId());
 				setVisible(false);
 				
 				//Close current window here
@@ -208,8 +205,11 @@ public class Consultant extends JFrame{
 			//need to update as not making new entry every time just changing info
 			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 			GPSISDataMapper.connectToDatabase();
+			double tNum = Double.parseDouble(jb8.getText());
+			ConsultantObject r = new ConsultantObject(jb1.getText(),jb2.getText(),jb3.getText(),jb4.getText(),jb5.getText(),jb6.getText(),tNum);
 			
-		
+			consultantDMO.put(r);
+			
 		}
 		
         //Removed by ID
@@ -218,7 +218,6 @@ public class Consultant extends JFrame{
 			JOptionPane.showMessageDialog(null, "Deleted" );
 			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 			GPSISDataMapper.connectToDatabase();
-			ConsultantObject r = new ConsultantObject();
 			consultantDMO.removeById(ID);
 			butt2.setText("Removed");
 			setVisible(false);

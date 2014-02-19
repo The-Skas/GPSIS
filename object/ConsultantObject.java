@@ -5,19 +5,16 @@ import java.util.Date;
 
 import framework.GPSIS;
 import framework.GPSISObject;
-
+//Extending GPSIS object so methods can be inherited (this is so we have to write less code, makes everything 
+//-work neater and fit together properly)
 public class ConsultantObject extends GPSISObject{
-		private int id;
 		private String fname, lname, title, address, email, contactnum, speciality;
 		private double price;
 		
-		public ConsultantObject(){
-			
-		}
-		
 		public ConsultantObject(String title, String fname, String lname,String address, String email, String contactnum,
 				double price){
-			this.id= getId();
+			//Setting variableswhen constructed
+			this.id = id;
 			this.title = title;
 			this.fname=fname;
 			this.lname = lname;
@@ -29,6 +26,21 @@ public class ConsultantObject extends GPSISObject{
 			
 		}
 		
+		public ConsultantObject(int id, String title, String fname, String lname,String address, String email, String contactnum,
+				double price){
+			//Setting variableswhen constructed
+			this.id = id;
+			this.title = title;
+			this.fname=fname;
+			this.lname = lname;
+			this.address = address;
+			this.email = email;
+			this.contactnum= contactnum;
+			this.speciality = speciality;
+			this.price = price;
+			
+		}
+		//Get methods
 		public String getFName(){
 			return fname;
 		}

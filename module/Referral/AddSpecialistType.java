@@ -74,15 +74,14 @@ public class AddSpecialistType extends JFrame {
 		but4.setToolTipText("Enter Type into textbox");
 		but4.addActionListener(e);
 		
-		
-		
+	
 		
 	}
 	public class Event implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource()==but4){
+			if((e.getSource()==but4)&&(tlb1.getText().length() !=0)){
 				//Add speciality from textarea to speciality sql table.
 				//Speciality get by name and add by select* from Speciality where 
 				SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
@@ -92,6 +91,9 @@ public class AddSpecialistType extends JFrame {
 				specialityTypeDMO.put(r);
 				JOptionPane.showMessageDialog(null, "Added");
 				setVisible(false);
+			}
+			else if((e.getSource()==but4)&&(tlb1.getText().length() ==0)){
+				JOptionPane.showMessageDialog(null, "Enter into text box or use Drop Down!");
 			}
 			if(e.getSource()==but2){
 				SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
