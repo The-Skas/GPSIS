@@ -8,17 +8,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 
-   import javax.swing.JButton;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/*
     class DatePicker {
     	Calendar cal = java.util.Calendar.getInstance(); 
  int month = cal.get(java.util.Calendar.MONTH);
- int year = cal.get(java.util.Calendar.YEAR);;
+ int year = cal.get(java.util.Calendar.YEAR);
  JLabel l = new JLabel("", JLabel.CENTER);
  String day = "";
  JDialog d;
@@ -38,7 +39,8 @@ import javax.swing.JTextField;
                  button[x].setBackground(Color.white);
                  if (x > 6)
                          button[x].addActionListener(new ActionListener() {
-                                 public void actionPerformed(ActionEvent ae) {
+                                 @Override
+								public void actionPerformed(ActionEvent ae) {
                                          day = button[selection].getActionCommand();
                                          d.dispose();
                                  }
@@ -55,7 +57,8 @@ import javax.swing.JTextField;
          JPanel p2 = new JPanel(new GridLayout(1, 3));
          JButton previous = new JButton("<< Previous");
          previous.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent ae) {
+                 @Override
+				public void actionPerformed(ActionEvent ae) {
                          month--;
                          displayDate();
                  }
@@ -64,7 +67,8 @@ import javax.swing.JTextField;
          p2.add(l);
          JButton next = new JButton("Next >>");
          next.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent ae) {
+                 @Override
+				public void actionPerformed(ActionEvent ae) {
                          month++;
                          displayDate();
                  }
@@ -103,6 +107,7 @@ import javax.swing.JTextField;
          return sdf.format(cal.getTime());
  }
 }
+*/
 
   class Picker {
  public static void main(String[] args) {
@@ -118,7 +123,8 @@ import javax.swing.JTextField;
          f.pack();
          f.setVisible(true);
          b.addActionListener(new ActionListener() {
-                 public void actionPerformed(ActionEvent ae) {
+                 @Override
+				public void actionPerformed(ActionEvent ae) {
                          text.setText(new DatePicker(f).setPickedDate());
                  }
          });
