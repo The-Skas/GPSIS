@@ -18,6 +18,7 @@ import mapper.MedicineDMO;
 import mapper.PatientDMO;
 import mapper.PrescriptionDMO;
 import mapper.RoomDMO;
+import mapper.SpecialityDMO;
 import mapper.StaffMemberDMO;
 import mapper.TaxOfficeDMO;
 import module.LoginModule;
@@ -33,6 +34,7 @@ public class GPSISFramework {
     protected static PatientDMO patientDMO = PatientDMO.getInstance();
     protected static MedicineDMO medicineDMO = MedicineDMO.getInstance();
     protected static PrescriptionDMO prescriptionDMO = PrescriptionDMO.getInstance();
+    protected static SpecialityDMO specialityDMO = SpecialityDMO.getInstance();
 //	etc.
 	
 	protected static final String APPTITLE = "General Practitioner's Surgery Information System";

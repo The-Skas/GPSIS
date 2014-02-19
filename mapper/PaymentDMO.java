@@ -8,7 +8,9 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -31,20 +33,7 @@ public class PaymentDMO extends GPSISDataMapper<PaymentObject>
             instance = new PaymentDMO("Payment");
         return instance;
     }
-        
-   
-    //Returns a Set of all Payments
-  	//getAll
-    public Set<PaymentObject> getAll() {
-        return getAllByProperties(new SQLBuilder());
-    }
-    
-    //return a Payment object that relates to the id
-    //getById 
-    public PaymentObject getById(int id) {
-        return this.getByProperties(new SQLBuilder("id", "=", ""+id));
-    }
-    
+           
     //getByProperties
     //Return the first Payment object in the ResultSet
     public PaymentObject getByProperties(SQLBuilder query){
@@ -66,9 +55,9 @@ public class PaymentDMO extends GPSISDataMapper<PaymentObject>
         
     //Returns a Set containing all of the Payments that match the given criteria
     //getAllByProperties
-    public Set<PaymentObject> getAllByProperties(SQLBuilder query){
+    public List<PaymentObject> getAllByProperties(SQLBuilder query){
     	//Makes set
-          Set<PaymentObject> Payment = new HashSet<>();
+          List<PaymentObject> Payment = new ArrayList<>();
           try{            
             ResultSet res = GPSISDataMapper.getResultSet(query, this.tableName);            
             while(res.next()) // While there's a Payment, create a the Payment object and add it to a Set
@@ -107,25 +96,6 @@ public class PaymentDMO extends GPSISDataMapper<PaymentObject>
 		return null;
     }
     
-   //removeById
-   //Remove a Payment from the database given its Id
-    public void removeById(int id){
-        try 
-        {
-            removeByProperty(new SQLBuilder("id","=",""+id));
-        } 
-        catch (SQLException e) 
-        {
-        	System.err.println(e.getMessage());
-        }
-    }
-    
-    //Removes all Payments from the database that match the given criteria
-  //removeByProperty
-    public void removeByProperty(SQLBuilder query) throws SQLException 
-    {
-        GPSISDataMapper.removeByPropertyHelper(query, this.tableName);        
-    }
 
    //put
    //Put a given Payment object onto the Database. Used for INSERT and UPDATE

@@ -1,14 +1,21 @@
 package mapper;
 import module.Consultant.*;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 import object.ConsultantObject;
+import object.Register;
+import object.Speciality;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -35,7 +42,7 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>{
        
     //return a Set of all Consultants
     //getAll
-    public Set<ConsultantObject> getAll(){
+    public List<ConsultantObject> getAll(){
         return getAllByProperties(new SQLBuilder());
     }
     //return a Consultant object that relates to the id
@@ -67,16 +74,54 @@ public class ConsultantDMO extends GPSISDataMapper<ConsultantObject>{
         return null;
     }
     
-    public void addSpeciality(Consultant o, Speciality s)
+    /** addSpeciality
+     * Create a relationship between a given Consultant and Speciality
+     * @param o
+     * @param s
+     */
+    public void addSpecialityToConsultant(ConsultantObject c, Speciality s)
     {
+    	SQLBuilder sql = new SQLBuilder()
+        .SET("consultant_id","=",""+c.getId())
+        .SET("speciality_id", "=", ""+s.getId());
+    	try {
+			putHelper(sql, "ConsultantSpeciality", null);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public List<Speciality> getSpecialitiesForConsultant(ConsultantObject c) throws EmptyResultSetException
+    {
+    	SQLBuilder query = new SQLBuilder("consultant_id", "=",""+ c.getId());
+    	List<Speciality> conSpecs = new ArrayList<Speciality>();
+    	String from = "ConsultantSpeciality "
+    			+ "JOIN Speciality ON"
+    			+ "ConsultantSpecialty.speciality_id = speciality.id";
+    	try {
+			ResultSet res = GPSISDataMapper.getResultSet(query, from);
+			while (res.next())
+			{
+				conSpecs.add(new Speciality(res.getInt("speciality_id"), res.getString("name")));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
+    	if (conSpecs.isEmpty())
+    		throw new EmptyResultSetException();
+    	else
+    		return conSpecs;
+		
     }
         
     //Returns a Set containing all of the Consultants that match the given criteria
     //getAllByProperties
-    public Set<ConsultantObject> getAllByProperties(SQLBuilder query) 
+    public List<ConsultantObject> getAllByProperties(SQLBuilder query) 
     {
-          Set<ConsultantObject> Consultant = new HashSet<>();
+          List<ConsultantObject> Consultant = new ArrayList<>();
           
           try 
           {            

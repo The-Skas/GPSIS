@@ -5,13 +5,13 @@ import framework.GPSISObject;
 public class Speciality extends GPSISObject {
 	private String name;
 	
-	public Speciality (String n, String d)
+	public Speciality (String n)
 	{
 		this.name = n;
 		specialityDMO.put(this);
 	}
 	
-	public Speciality (int id, String n, String d)
+	public Speciality (int id, String n)
 	{
 		this.id = id;
 		this.name = n;

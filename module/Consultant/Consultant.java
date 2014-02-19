@@ -1,18 +1,23 @@
 package module.Consultant;
 import java.awt.FlowLayout;
+
 import object.SpecialityTypeObject;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
 
 import mapper.ConsultantDMO;
 import mapper.SQLBuilder;
-import mapper.SpecialityTypeDMO;
+import mapper.SpecialityDMO;
 import module.Referral.AddSpecialistType;
 import object.ConsultantObject;
+import object.Speciality;
 import object.SpecialityTypeObject;
+import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class Consultant extends JFrame{
@@ -24,54 +29,54 @@ public class Consultant extends JFrame{
 	private int counter = 0;
 	private int ID;
 	
-	public Consultant(int s, String title, String fn, String ln, String add, String email, String conn,String price){
+	public Consultant(ConsultantObject c){
 		setLayout(new FlowLayout());
 		Event e = new Event();
 		
-		this.ID = s;
+		this.ID = c.getId();
 		lab1 = new JLabel("Title: ");
 		add(lab1);
 		jb1 = new JTextArea(1,15);
 		add(jb1);
 		jb1.setEditable(false);
-		jb1.setText(title);
+		jb1.setText(c.getTitle());
 		lab2 = new JLabel("First Name: ");
 		add(lab2);
 		jb2 = new JTextArea(1,15);
 		add(jb2);
 		jb2.setEditable(false);
-		jb2.setText(fn);
+		jb2.setText(c.getFName());
 		lab3 = new JLabel("Last Name: ");
 		add(lab3);
 		jb3 = new JTextArea(1,15);
 		add(jb3);
 		jb3.setEditable(false);
-		jb3.setText(ln);
+		jb3.setText(c.getLName());
 		lab4 = new JLabel("Address: ");
 		add(lab4);
 		jb4 = new JTextArea(1,15);
 		add(jb4);
 		jb4.setEditable(false);
-		jb4.setText(add);
+		jb4.setText(c.getAddress());
 		lab5 = new JLabel("Email: ");
 		add(lab5);
 		jb5 = new JTextArea(1,15);
 		add(jb5);
 		jb5.setEditable(false);
-		jb5.setText(email);
+		jb5.setText(c.getEmail());
 		lab6 = new JLabel("Contact num: ");
 		add(lab6);
 		jb6 = new JTextArea(1,13);
 		add(jb6);
 		jb6.setEditable(false);
-		jb6.setText(conn);
+		jb6.setText(c.getNum());
 		
 		lab8 = new JLabel("Price: ");
 		add(lab8);
 		jb8 = new JTextArea(1,13);
 		add(jb8);
 		jb8.setEditable(false);
-		jb8.setText(price);
+		jb8.setText("" +c.getPrice());
 		
 		lab9 = new JLabel("Specialitys: ");
 		add(lab9);
@@ -79,14 +84,17 @@ public class Consultant extends JFrame{
 		add(jb9);
 		//Search speciality by id and make a string a combination of the specialitys and add them to the jb9
 		String spec = "";
-		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
-		GPSISDataMapper.connectToDatabase();
-		Set<SpecialityTypeObject> tempset = specialityTypeDMO.getAll();
-		for(SpecialityTypeObject x:tempset){
-			if(ID == x.getConID()){
-				spec += x.getName() + ", ";
+		try {
+			List<Speciality> consultantSpecialities = ConsultantDMO.getInstance().getSpecialitiesForConsultant(c);
+			for(Speciality x:consultantSpecialities){
+					spec += x.getName() + ", ";
 			}
+		} catch (EmptyResultSetException e1) {
+			spec = "No Specialities";
+			System.out.println("Consultant has no specialities.");
+			e1.printStackTrace();
 		}
+		
 		jb9.setText(spec);
 		jb9.setEditable(false);
 		
@@ -183,7 +191,6 @@ public class Consultant extends JFrame{
 				amo= Double.parseDouble(jb8.getText().trim());
 			
 				ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
-				GPSISDataMapper.connectToDatabase();
 				//have to convert boolean to tiny int
 				ConsultantObject r = new ConsultantObject(jb1.getText(), jb2.getText(), jb3.getText(), jb4.getText(),
 														  jb5.getText(), jb6.getText(), amo);

@@ -2,6 +2,7 @@ package module.Consultant;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -63,9 +64,7 @@ public class AddChangeConsultant extends JFrame {
 					GPSISDataMapper.connectToDatabase();
 					
 					String s = consultantDMO.getById(id).getTitle();
-					Consultant consul = new Consultant(id,consultantDMO.getById(id).getTitle(),consultantDMO.getById(id).getFName(),
-							consultantDMO.getById(id).getLName(),consultantDMO.getById(id).getAddress(),consultantDMO.getById(id).getEmail(),
-							consultantDMO.getById(id).getNum(),""+ consultantDMO.getById(id).getPrice());
+					Consultant consul = new Consultant(consultantDMO.getById(id));
 					consul.setVisible(true);
 					consul.setTitle("View Consultant");
 					consul.setSize(260,300);	
@@ -83,7 +82,7 @@ public class AddChangeConsultant extends JFrame {
 		
 		ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		Set<ConsultantObject> se = consultantDMO.getAll();
+		List<ConsultantObject> se = consultantDMO.getAll();
 		
 		for(ConsultantObject x:se){
 		System.out.print(x.getId());
