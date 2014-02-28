@@ -1,4 +1,5 @@
 package module.Referral;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import mapper.ConsultantDMO;
 import mapper.PaymentDMO;
 import mapper.ReferralDMO;
 import mapper.SpecialityTypeDMO;
+import module.Consultant.Consultant.Event;
 import object.*;
 import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
@@ -27,17 +30,39 @@ public class MakeReferral extends JFrame {
 	private ArrayList<String> choicesA = new ArrayList<String>();
 	//Choices for drop-down list
 	private String[] choicesB;
-	private JLabel lab1, lab2, lab3,sp,sp2,findinv,findinv2;
+	private JLabel lab1, lab2, lab3,sp,sp2,findinv,findinv2,space1,space2,space3,space4,space5,space6;
 	private JButton but1, but2, but3;
 	private JTextArea text1, text2;
 	private int con = 0,pat = 0,pay = 0,conId = 0; 
 	private Double price = 0.0;
+	private JPanel Main, pan1,pan2,pan3,pan4,pan5,pan6;
+	private JMenu men;
+	private JMenuItem itm;
+	private JMenuBar mb;
 	
 	//GUI for Make Referral form
 	public MakeReferral(){
-		setLayout(new FlowLayout());
-		//Set class for action listener
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
 		Event e = new Event();
+		
+		//Menu
+		mb = new JMenuBar();
+		setJMenuBar(mb);
+		men = new JMenu("File");
+		mb.add(men);
+		
+		//Main Panel
+		Main = new JPanel();
+		add(Main);
+		Main.setBorder(BorderFactory.createTitledBorder("Referral"));
+		Main.setLayout(new FlowLayout());
+		
+		//Spacing
+		pan4 = new JPanel();
+		space4 = new JLabel("                                                                                                                                           ");
+		pan4.add(space4);
+		Main.add(pan4);
+				
 		//Connecting to database in GPSISMapper class
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
@@ -49,9 +74,10 @@ public class MakeReferral extends JFrame {
 			//Added to an array-list as its an unknown size(cant use an array)
 			for(SpecialityTypeObject x:set1){
 				choicesA.add(x.getName());
+				System.out.print(x.getName());
 			}
+			
 		} catch (EmptyResultSetException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -61,41 +87,62 @@ public class MakeReferral extends JFrame {
 		hset.addAll(choicesA);
 		choicesA.clear();
 		choicesA.addAll(hset);
-		//sort arraylist here
+		
+		//sort array-list here
 		Collections.sort(choicesA);
-		//Add Dropdown choices
+		
+		//Add Drop-down choices
 		choicesB = new String[choicesA.size()];
 		for(int i=0;i<choicesA.size();i++){
 			choicesB[i] = choicesA.get(i);
 		}
 		//Combo Box
-		lab1 = new JLabel("Choose Type: ");
-		add(lab1);
+		pan1 = new JPanel();
+		lab1 = new JLabel("             Choose Type: ");
+		pan1.add(lab1);
 		combo1 = new JComboBox(choicesB);
-		add(combo1);
+		pan1.add(combo1);
 		combo1.addActionListener(e);
 		combo1.setToolTipText("Consultant type");
-		
-		//To break up text
-		sp = new JLabel("                                                  ");
-		add(sp);
-		
+		space1 = new JLabel("            ");
+		pan1.add(space1);
+		pan1.setBorder(border);
+		Main.add(pan1);
+		pan1.setBorder(BorderFactory.createEtchedBorder());
 		
 		//Name
-		lab2 = new JLabel("       Enter Name: ");
-		add(lab2);
+		pan2 = new JPanel();
+		lab2 = new JLabel("                                                              Enter Name: ");
+		pan2.add(lab2);
 		text1 = new JTextArea(1,10);
-		add(text1);
+		pan2.add(text1);
+		space2 = new JLabel("                                                            ");
+		pan2.add(space2);
+		text1.setBorder(border);
+		pan2.setBorder(BorderFactory.createEtchedBorder());
+		Main.add(pan2);
 		
 		//Add Patient ID
-		lab3 = new JLabel("Enter Patient ID: ");
-		add(lab3);
+		pan3 = new JPanel();
+		lab3 = new JLabel("                                                       Enter Patient ID: ");
+		pan3.add(lab3);
 		text2 = new JTextArea(1,10);
-		add(text2);
+		text2.setBorder(border);
+		pan3.add(text2);
+		space3 = new JLabel("                                                            ");
+		pan3.add(space3);
+		pan3.setBorder(BorderFactory.createEtchedBorder());
+		Main.add(pan3);
+		
+		//Spacing
+		pan5 = new JPanel();
+		space5= new JLabel("                                                                                                                                                                                       ");
+		pan5.add(space5);
+		Main.add(pan5);
 		
 		//Add Create Button
 		but1 = new JButton("CREATE");
-		add(but1);
+		Main.add(but1);
 		but1.addActionListener(e);
 		
 	}
@@ -153,7 +200,7 @@ public class MakeReferral extends JFrame {
 						r2.setLocation(x+60, y+50);
 						r2.setVisible(true);
 						r2.setTitle("Payment");
-						r2.setSize(300, 235);
+						r2.setSize(600, 350);
 						
 						//Turn string to an integer willing that it is correct data (otherwise caught in catch)
 						pat = Integer.parseInt(text2.getText());

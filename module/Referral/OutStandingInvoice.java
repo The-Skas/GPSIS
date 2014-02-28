@@ -1,6 +1,7 @@
 package module.Referral;
 
-	import java.awt.Component;
+	import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import mapper.InvoiceDMO;
 import mapper.SpecialityTypeDMO;
@@ -27,8 +29,21 @@ import framework.GPSISDataMapper;
 		private int counter = 0;
 		private String[] arr1;
 		private List<InvoiceObject> set1;
+		private JMenu men;
+		private JMenuBar mb;
+		private JMenuItem itm;
+		private JPanel pan1;
 		
+	
 		public OutStandingInvoice(){
+			Border border = BorderFactory.createLineBorder(Color.BLACK);
+			mb = new JMenuBar();
+			setJMenuBar(mb);
+			men = new JMenu("File");
+			mb.add(men);
+			
+			pan1 = new JPanel();
+			add(pan1);
 			setLayout(new FlowLayout());
 			Event e = new Event();
 			 	InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
@@ -47,16 +62,18 @@ import framework.GPSISDataMapper;
 				
 			
 			lab8 = new JLabel("Choose ID: ");
-			add(lab8);
+			pan1.add(lab8);
 			arr1 = fillArray();
 			combo = new JComboBox(arr1);
-			add(combo);
+			pan1.add(combo);
 			combo.addActionListener(e);
 			
 			
 			but7 = new JButton("Get");
-			add(but7);
+			pan1.add(but7);
 			but7.addActionListener(e);
+			
+			pan1.setBorder(BorderFactory.createTitledBorder("Outstanding"));
 			
 		}
 		
