@@ -2,7 +2,9 @@ package module.Referral;
 
 	import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -34,7 +36,6 @@ import framework.GPSISDataMapper;
 		private JMenuItem itm;
 		private JPanel pan1;
 		
-	
 		public OutStandingInvoice(){
 			Border border = BorderFactory.createLineBorder(Color.BLACK);
 			mb = new JMenuBar();
@@ -60,7 +61,6 @@ import framework.GPSISDataMapper;
 					e1.printStackTrace();
 				}
 				
-			
 			lab8 = new JLabel("Choose ID: ");
 			pan1.add(lab8);
 			arr1 = fillArray();
@@ -106,13 +106,19 @@ import framework.GPSISDataMapper;
 				String com = (String) combo.getSelectedItem();
 				//com is ID
 				int iden = 0;
+
 					try{
 						iden = Integer.parseInt(com);
 						InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
 						GPSISDataMapper.connectToDatabase();
 						InvoiceObject obj = invoiceDMO.getById(iden);
 						Invoice i = new Invoice(com,obj.getRefID(),obj.getAmount(),obj.getConID(),obj.getIsPaid());
-						i.setSize(300, 200);
+						Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+				    	//Centre Window on screen
+						int x = (int) ((dimension.getWidth() - i.getWidth()) / 3);
+						int y = (int) ((dimension.getHeight() - i.getHeight()) / 4);
+						i.setLocation(x-40, y-10);
+						i.setSize(600, 350);
 						i.setVisible(true);
 						i.setTitle("OutStanding");
 						setVisible(false);
@@ -127,5 +133,4 @@ import framework.GPSISDataMapper;
 			}
 			
 		}
-		
 }

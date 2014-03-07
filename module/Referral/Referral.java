@@ -43,7 +43,6 @@ public class Referral extends JFrame {
 	private JPanel pan1,pan2,pan3,pan4,pan5,pan6,pan7,Main;
 	private JList list;
 	
-	
 		public Referral() throws EmptyResultSetException{
 			
 			//Method to See if invoice's are more than 20 days old but < 30 days, if over auto pay.
@@ -311,7 +310,6 @@ public class Referral extends JFrame {
 		}
 		public static void main(String[] args) throws EmptyResultSetException{
 			//Start	
-			
 	    	Referral refer = new Referral();
 	    	//Centring the window on screen 
 	    	Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();

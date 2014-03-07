@@ -26,15 +26,15 @@ import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 
 public class Consultant extends JFrame{
-	private JLabel lab1,lab2,lab3,lab4,lab5,lab6,lab7,lab8,lab9,lab10,lab11,lab12,lab13;
-	private JLabel space1, space2, space3, space4, space5, space6, space7,space8;
+	private JLabel lab1,lab2,lab3,lab4,lab5,lab6,lab7,lab8,lab9,lab10,lab11,lab12,lab13,AccountName,AccountNum,SortNum;
+	private JLabel space1, space2, space3, space4, space5, space6, space7,space8,space9,space10,space11;
 	private JButton but1,but2,but3;
 	private JButton butt1,butt2,butt3,butt4;
 	private String[] speciality;
-	private JTextArea jb1,jb2,jb3,jb4,jb5,jb6,jb7,jb8,jb9;
+	private JTextArea jb1,jb2,jb3,jb4,jb5,jb6,jb7,jb8,jb9,AccountNa,AccountNu,SortNu;
 	private int counter = 0;
 	private int ID;
-	private JPanel pan1,pan2,pan3, pan4, pan5, pan6, pan7, pan8, pan9;
+	private JPanel pan1,pan2,pan3, pan4, pan5, pan6, pan7, pan8, pan9,pan10,pan11,pan12;
 	private JMenuBar mb;
 	private JMenu men;
 	private JMenuItem itm;
@@ -158,6 +158,47 @@ public class Consultant extends JFrame{
 		jb8.setText(price);
 		jb8.setBorder(border);
 		pan8.setBorder(BorderFactory.createEtchedBorder());
+		
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<COPY to other constructor<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<!!!!!!!!
+		
+		//Account Name
+		pan10 = new JPanel();
+		pan1.add(pan10);
+		AccountName = new JLabel("Account Name");
+		pan10.add(AccountName);
+		space9 = new JLabel("                                                                                                ");
+		pan10.add(space9);
+		AccountNa = new JTextArea(1,15);
+		pan10.add(AccountNa);
+		AccountNa.setEditable(false);
+		AccountNa.setBorder(border);
+		pan10.setBorder(BorderFactory.createEtchedBorder());
+		
+		//Account Number
+		pan11 = new JPanel();
+		pan1.add(pan11);
+		AccountNum = new JLabel("Account Number: ");
+		pan11.add(AccountNum);
+		space10 = new JLabel("                                                                                          ");
+		pan11.add(space10);
+		AccountNu = new JTextArea(1,15);
+		pan11.add(AccountNu);
+		AccountNu.setEditable(false);
+		AccountNu.setBorder(border);
+		pan11.setBorder(BorderFactory.createEtchedBorder());
+		
+		//SortCode
+		pan12 = new JPanel();
+		pan1.add(pan12);
+		SortNum = new JLabel("Sort Code: ");
+		pan12.add(SortNum);
+		space11 = new JLabel("                                                                                                       ");
+		pan12.add(space11);
+		SortNu = new JTextArea(1,15);
+		pan12.add(SortNu);
+		SortNu.setEditable(false);
+		SortNu.setBorder(border);
+		pan12.setBorder(BorderFactory.createEtchedBorder());
 		
 		//Specialities
 		pan9 = new JPanel();
@@ -311,23 +352,60 @@ public class Consultant extends JFrame{
 		pan8.add(jb7);
 		jb7.setBorder(border);
 		
+		//Account Name
+		pan10 = new JPanel();
+		pan1.add(pan10);
+		AccountName = new JLabel("Account Name");
+		pan10.add(AccountName);
+		space9 = new JLabel("                                                                                                ");
+		pan10.add(space9);
+		AccountNa = new JTextArea(1,15);
+		pan10.add(AccountNa);
+		AccountNa.setEditable(false);
+		AccountNa.setBorder(border);
+		pan10.setBorder(BorderFactory.createEtchedBorder());
+				
+		//Account Number
+		pan11 = new JPanel();
+		pan1.add(pan11);
+		AccountNum = new JLabel("Account Number: ");
+		pan11.add(AccountNum);
+		space10 = new JLabel("                                                                                          ");
+		pan11.add(space10);
+		AccountNu = new JTextArea(1,15);
+		pan11.add(AccountNu);
+		AccountNu.setEditable(false);
+		AccountNu.setBorder(border);
+		pan11.setBorder(BorderFactory.createEtchedBorder());
+				
+		//SortCode
+		pan12 = new JPanel();
+		pan1.add(pan12);
+		SortNum = new JLabel("Sort Code: ");
+		pan12.add(SortNum);
+		space11 = new JLabel("                                                                                                       ");
+		pan12.add(space11);
+		SortNu = new JTextArea(1,15);
+		pan12.add(SortNu);
+		SortNu.setEditable(false);
+		SortNu.setBorder(border);
+		pan12.setBorder(BorderFactory.createEtchedBorder());
 		
 		//Action Listener
 		but1 = new JButton("Add");
 		pan1.add(but1);
 		but1.addActionListener(e);
 	
-		
 	}
 	public class Event implements ActionListener{
-
-		@Override
 		
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			counter = 0;
+			
 			//Editing
 		if((e.getSource()==butt1)){
-		
+			
 				jb1.setEditable(true);
 				jb2.setEditable(true);
 				jb3.setEditable(true);
@@ -335,13 +413,15 @@ public class Consultant extends JFrame{
 				jb5.setEditable(true);
 				jb6.setEditable(true);
 				jb8.setEditable(true);
-				//As i add speciality through a droplist
+				//As i add speciality through a drop-list
 				jb9.setEditable(false);
+				
 			}
 		if((e.getSource()==but1)&&(counter<1)){
+			
 				counter+=1;
 				double amo =0;
-			
+				
 				try{
 				amo= Double.parseDouble(jb7.getText().trim());
 				
@@ -418,7 +498,7 @@ public class Consultant extends JFrame{
 		Consultant consul = new Consultant(2,"MR", "MATT", "SHARP", "BA", "BAA", "BAAA", "2.30");
 		consul.setVisible(true);
 		consul.setTitle("Add Consultant");
-		consul.setSize(600,450);	
+		consul.setSize(600,560);	
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (int) ((dimension.getWidth() - consul.getWidth()) / 3);
 		int y = (int) ((dimension.getHeight() - consul.getHeight()) / 4);

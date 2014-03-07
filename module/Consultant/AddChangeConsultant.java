@@ -90,7 +90,7 @@ public class AddChangeConsultant extends JFrame {
 				Consultant consul = new Consultant();
 				consul.setVisible(true);
 				consul.setTitle("Add Consultant");
-				consul.setSize(600,380);	
+				consul.setSize(600,490);	
 				Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 				int x = (int) ((dimension.getWidth() - consul.getWidth()) / 3);
 				int y = (int) ((dimension.getHeight() - consul.getHeight()) / 4);
@@ -112,7 +112,7 @@ public class AddChangeConsultant extends JFrame {
 							consultantDMO.getById(id).getNum(),""+ consultantDMO.getById(id).getPrice());
 					consul.setVisible(true);
 					consul.setTitle("View Consultant");
-					consul.setSize(600,450);	
+					consul.setSize(600,559);	
 					Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 					int x = (int) ((dimension.getWidth() - consul.getWidth()) / 3);
 					int y = (int) ((dimension.getHeight() - consul.getHeight()) / 4);
