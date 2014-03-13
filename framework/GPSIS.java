@@ -1,12 +1,6 @@
-package framework;
+ package framework;
 
 import java.util.Locale;
-
-/** GPSIS
- * Initial loading Class.
- * 
- * @author Vijendra Patel
- */
 
 public class GPSIS {
 	

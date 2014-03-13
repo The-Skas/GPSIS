@@ -21,6 +21,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import object.ConsultantObject;
@@ -31,7 +32,7 @@ import mapper.ConsultantDMO;
 public class AddChangeConsultant extends JFrame {
 	private JLabel lab1,lab2,lab3,lab4;
 	private JButton but1,but2,but3;
-	private JTextArea jb;
+	private JTextField jb;
 	private JMenu men1;
 	private JMenuItem menitm;
 	private JMenuBar bar1;
@@ -50,7 +51,7 @@ public class AddChangeConsultant extends JFrame {
 	
 		bar1 = new JMenuBar();
 		setJMenuBar(bar1);
-		men1 = new JMenu("File");
+		men1 = new JMenu("Add/Remove Consultant");
 		bar1.add(men1);
 		menitm = new JMenuItem("Add/Change Consultant");
 		men1.add(menitm);
@@ -59,7 +60,7 @@ public class AddChangeConsultant extends JFrame {
 		
 		lab1 = new JLabel("Search by ID: ");
 		pan1.add(lab1);
-		jb = new JTextArea(1,15);
+		jb = new JTextField(15);
 		
 		pan1.add(jb);
 		//For break
@@ -79,7 +80,7 @@ public class AddChangeConsultant extends JFrame {
 		jb.setBorder(border);
 		pan2.setBorder(BorderFactory.createTitledBorder("ADD/Remove/Search Consultant"));
 		pan1.setBorder(BorderFactory.createEtchedBorder());
-		
+	
 		
 	}
 	public class Event implements ActionListener{
@@ -96,11 +97,11 @@ public class AddChangeConsultant extends JFrame {
 				int y = (int) ((dimension.getHeight() - consul.getHeight()) / 4);
 				consul.setLocation(x+200, y+80);
 			}
-			else if(e.getSource()==but1){
+			else if((e.getSource()==but1)&&(jb.getText().trim().length()!=0)){
 				//passing in the id so if remove is selected, i can 'removeByID()'
 				int id = 0;
 				
-				//try{
+				try{
 					//Turns String into an int
 					id = Integer.parseInt(jb.getText());
 					ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
@@ -118,9 +119,9 @@ public class AddChangeConsultant extends JFrame {
 					int y = (int) ((dimension.getHeight() - consul.getHeight()) / 4);
 					consul.setLocation(x+200, y+90);
 			
-				//}catch(Exception exep){
-				//	JOptionPane.showMessageDialog(null, "Incorrect data/Doesnt exist");
-				//}
+				}catch(Exception exep){
+					JOptionPane.showMessageDialog(null, "Incorrect data/Doesnt exist");
+				}
 				
 			}
 			

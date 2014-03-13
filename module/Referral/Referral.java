@@ -36,7 +36,7 @@ public class Referral extends JFrame {
 	private String[] choices = {"Referral ID", "Invoice ID"};
 	private JLabel lab1,tab1,tab2,tab3,find1,space1,space2,space3,space4,space5,space6,space7,space8,space9,space10;
 	private JButton but1, but2, but3, but4, but5, find2;
-	private JTextArea text1,find3;
+	private JTextField text1,find3;
 	private JMenuBar mb;
 	private JMenuItem itm;
 	private JMenu men;
@@ -44,36 +44,6 @@ public class Referral extends JFrame {
 	private JList list;
 	
 		public Referral() throws EmptyResultSetException{
-			
-			//Method to See if invoice's are more than 20 days old but < 30 days, if over auto pay.
-			/*
-			InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
-			GPSISDataMapper.connectToDatabase();
-			
-			ArrayList<InvoiceObject> invoices = (ArrayList<InvoiceObject>) invoiceDMO.getAll();
-			ArrayList<InvoiceObject> SelectedInv = new ArrayList<InvoiceObject>();
-			for(InvoiceObject x: invoices){
-				if(x.getDate()== 0){
-					SelectedInv.add(x);
-				}
-			}
-			String array[] = new String[SelectedInv.size()];
-			list = new JList(array);
-			
-			for(int i=0; i<SelectedInv.size();i++){
-				array[i] = ""+SelectedInv.get(i).getId();
-			}
-			
-			JOptionPane.showMessageDialog(
-					  null, list, "Are you Sure?", JOptionPane.PLAIN_MESSAGE);
-					//If the user selects Yes on the pop-up then the program will finish
-					if(list.getSelectedIndex()==0){
-						System.exit(0);
-					}
-					else{
-					}
-			*/
-					
 					
 			//Border line colour
 			Border border = BorderFactory.createLineBorder(Color.BLACK);
@@ -98,11 +68,13 @@ public class Referral extends JFrame {
 			pan1.add(space2);
 			Main.add(pan1);
 
-			
+			/*
 			//Combo box (and populating it)
-			space1 = new JLabel("                                                                              ");
+			 */
+			space1 = new JLabel("                                                                                                                                                             ");
 			pan2 = new JPanel();
 			pan2.add(space1);
+			/*
 			combo1 = new JComboBox(choices);
 			//Hovering text
 			combo1.setToolTipText("Select Type");
@@ -111,6 +83,7 @@ public class Referral extends JFrame {
 			pan2.add(space2);
 			combo1.addActionListener(e);
 			pan2.setBorder(BorderFactory.createEtchedBorder());
+				*/
 			Main.add(pan2);
 			
 			//Label, Text-box and Button to find referral
@@ -119,7 +92,7 @@ public class Referral extends JFrame {
 			pan4.add(space3);
 			lab1 = new JLabel("Find Referral:");
 			pan4.add(lab1);
-			text1 = new JTextArea(1,10);
+			text1 = new JTextField(10);
 			pan4.add(text1);
 			text1.setBorder(border);
 			but1 = new JButton("Search");
@@ -127,7 +100,7 @@ public class Referral extends JFrame {
 			space4 = new JLabel("                                                ");
 			pan4.add(space4); 
 			but1.addActionListener(e);
-			but1.setToolTipText("Change Search Type with Dropdown");
+			//but1.setToolTipText("Change Search Type with Dropdown");
 			pan4.setBorder(BorderFactory.createEtchedBorder());
 			Main.add(pan4);
 			
@@ -137,7 +110,7 @@ public class Referral extends JFrame {
 			pan5.add(space4);
 			find1 = new JLabel("  Find Invoice:");
 			pan5.add(find1);
-			find3 = new JTextArea(1,10);
+			find3 = new JTextField(10);
 			pan5.add(find3);
 			find3.setBorder(border);
 			find2 = new JButton("Search");
@@ -173,7 +146,7 @@ public class Referral extends JFrame {
 			pan7.add(but2);
 			but2.addActionListener(e);
 			//Make referral Button
-			but3 = new JButton("Make Referral");
+			but3 = new JButton("     Make Referral     ");
 			pan7.add(but3);
 			but3.addActionListener(e);
 			Main.add(pan7);
@@ -197,11 +170,12 @@ public class Referral extends JFrame {
 					r.setTitle("Make Referral");
 					r.setSize(600, 350);
 				}
+				
 				//Button to find referral, the if statement also determines if the corresponding-
 				//-text box is empty or not
-				else if((e.getSource()== but1)&&(text1.getText().length()>=1)&&(combo1.getSelectedItem().equals("Referral ID"))){
+				else if((e.getSource()== but1)&&(text1.getText().length()>=1)){
 					
-					String selection = (String)combo1.getSelectedItem();
+					//String selection = (String)combo1.getSelectedItem();
 					//Search when the drop-down selection = Referral ID.
 					
 						String searchValue = text1.getText();
@@ -213,7 +187,7 @@ public class Referral extends JFrame {
 							//Make a referralObject called r2 (using parseInt to turn text to an int)
 							ReferralObject r2 = referralDMO.getById(Integer.parseInt(searchValue));
 							//The GUI DetailReferral is constructed
-							DetailsReferral r = new DetailsReferral(selection, searchValue,r2);
+							DetailsReferral r = new DetailsReferral(searchValue,r2);
 							Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 					    	//Centre Window on screen
 							
@@ -224,32 +198,10 @@ public class Referral extends JFrame {
 							r.setTitle("Found Referral");
 							r.setSize(600, 350);
 							//Catch errors
-							}catch(NumberFormatException eee){
+							}catch(Exception eee){
 								//Pop-up message
 								JOptionPane.showMessageDialog(null, "ERROR");
-								eee.printStackTrace();
-							} catch (EmptyResultSetException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
 							}
-					/*
-					if(selection.equals("Invoice ID")){
-						InvoiceDMO in = InvoiceDMO.getInstance();
-						GPSISDataMapper.connectToDatabase();
-						ArrayList<InvoiceObject> list = new ArrayList<InvoiceObject>();
-						try {
-							list = (ArrayList<InvoiceObject>) in.getAll();
-						} catch (EmptyResultSetException e1) {
-							e1.printStackTrace();
-						}
-						String searchValue;
-						for(InvoiceObject x: list){
-							if(x.getId()==Integer.parseInt(text1.getText())){
-								searchValue = ""+x.getRefID();
-							}
-						}
-					}
-					*/
 				}
 				
 				//For empty textbox
@@ -280,10 +232,6 @@ public class Referral extends JFrame {
 				}
 				//Finding an invoice (to pay or view)
 				else if(e.getSource()==find2){
-					/*find3.getText();
-					InvoiceDMO invoiceDMO = InvoiceDMO.getInstance();
-					GPSISDataMapper.connectToDatabase();*/
-					//Construct invoice GUI by id set in text-box (find3.getText())
 					
 					int iden = 0;
 					try{
@@ -294,7 +242,7 @@ public class Referral extends JFrame {
 						Invoice i = new Invoice(find3.getText(),obj.getRefID(),obj.getAmount(),obj.getConID(),obj.getIsPaid());
 						i.setSize(600, 350);
 						i.setVisible(true);
-						i.setTitle("OutStanding");
+						i.setTitle("Invoice");
 						String tester = ""+obj.getRefID()+" "+obj.getAmount()+" "+obj.getConID()+" "+obj.getIsPaid();
 						Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 				    	//Centre Window on screen

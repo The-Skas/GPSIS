@@ -25,7 +25,7 @@ import mapper.ReferralDMO;
 
 public class Invoice extends JFrame {
 	private JLabel lab1,lab2,lab3,lab4,lab5, lab6, lab7;
-	private JTextArea a1,a2,a3,a4,a5, a7;
+	private JTextField a1,a2,a3,a4,a5, a7;
 	private JButton but1,but2, but7;
 	private JComboBox combo;
 	private int counter = 0;
@@ -67,7 +67,7 @@ public class Invoice extends JFrame {
 		pan1.add(lab1);
 		space1 = new JLabel("                                                                                                      ");
 		pan1.add(space1);
-		a1 = new JTextArea(1,15);
+		a1 = new JTextField(15);
 		a1.setBorder(border);
 		pan1.add(a1);
 		a1.setText(id);
@@ -80,7 +80,7 @@ public class Invoice extends JFrame {
 		pan2.add(lab7);
 		space2 = new JLabel("                                                                                                     ");
 		pan2.add(space2);
-		a7 = new JTextArea(1,15);
+		a7 = new JTextField(15);
 		pan2.add(a7);
 		a7.setBorder(border);
 		a7.setText(""+refID);
@@ -93,11 +93,11 @@ public class Invoice extends JFrame {
 		pan3.add(lab2);
 		space3 = new JLabel("                                                                                                       ");
 		pan3.add(space3);
-		a2 = new JTextArea(1,15);
+		a2 = new JTextField(15);
 		a2.setBorder(border);
 		pan3.add(a2);
 		a2.setText(""+Amount);
-		a1.setEditable(false);
+		a2.setEditable(false);
 		pan3.setBorder(BorderFactory.createEtchedBorder());
 		main.add(pan3);
 		
@@ -106,25 +106,26 @@ public class Invoice extends JFrame {
 		pan4.add(lab3);
 		space4 = new JLabel("                                                                                                ");
 		pan4.add(space4);
-		a3 = new JTextArea(1,15);
+		a3 = new JTextField(15);
 		a3.setBorder(border);
 		a3.setBorder(border);
 		pan4.add(a3);
 		a3.setText(""+ConId);
 		pan4.setBorder(BorderFactory.createEtchedBorder());
 		main.add(pan4);
-		a1.setEditable(false);
+		a3.setEditable(false);
 		
 		pan5 = new JPanel();
 		lab5 = new JLabel(" Recieved Date: ");
 		pan5.add(lab5);
 		space5 = new JLabel("                                                                                             ");
 		pan5.add(space5);
-		a5 = new JTextArea(1,15);
+		a5 = new JTextField(15);
 		a5.setBorder(border);
 		pan5.add(a5);
 		pan5.setBorder(BorderFactory.createEtchedBorder());
 		main.add(pan5);
+		a5.setEditable(false);
 		
 		Calendar cal = Calendar.getInstance();
 		java.util.Date dt = cal.getTime();

@@ -25,7 +25,7 @@ import framework.GPSISDataMapper;
 
 	public class OutStandingInvoice extends JFrame {
 		private JLabel lab1,lab2,lab3,lab4,lab5, lab6, lab7, lab8;
-		private JTextArea a1,a2,a3,a4,a5, a7;
+		
 		private JButton but1,but2, but7;
 		private JComboBox combo;
 		private int counter = 0;

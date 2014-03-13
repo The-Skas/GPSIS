@@ -16,20 +16,26 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import object.ConsultantObject;
+import object.StaffMember;
 import mapper.ConsultantDMO;
 import module.Consultant.AddChangeConsultant;
 import module.Referral.Referral;
 import exception.EmptyResultSetException;
 import framework.GPSISDataMapper;
 import framework.GPSISModuleMain;
+import object.Patient;
 
 public class SpecialistReferralsModule extends GPSISModuleMain {
 	
 	private JButton addChanCon, MakeRef;
 	private JLabel space;
+	private Patient p = null;
+	private JButton search;
 	
 	/* (non-Javadoc)
 	 * @see framework.GPSISModuleMain#getModuleView()
@@ -53,7 +59,13 @@ public class SpecialistReferralsModule extends GPSISModuleMain {
 			specialistReferralsModuleView.add(addChanCon,gbC);
 			specialistReferralsModuleView.add(space,gbC);
 			specialistReferralsModuleView.add(MakeRef,gbC);
-		
+			
+			search = new JButton("Search");
+			specialistReferralsModuleView.add(search);
+			search.addActionListener(e);
+			
+			
+			
 		return specialistReferralsModuleView;
 	}
 	public class Event implements ActionListener{
@@ -91,6 +103,16 @@ public class SpecialistReferralsModule extends GPSISModuleMain {
 					refer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					refer.setResizable(false);
 				} catch (EmptyResultSetException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			else if(e.getSource()== search){
+				
+				try {
+					 p = module.Patient.SearchPane.doSearch();
+					 JOptionPane.showMessageDialog(null, p.getFirstName() + "'s ID: " + p.getId());
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 				

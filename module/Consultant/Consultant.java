@@ -31,7 +31,8 @@ public class Consultant extends JFrame{
 	private JButton but1,but2,but3;
 	private JButton butt1,butt2,butt3,butt4;
 	private String[] speciality;
-	private JTextArea jb1,jb2,jb3,jb4,jb5,jb6,jb7,jb8,jb9,AccountNa,AccountNu,SortNu;
+	private JTextField jb1,jb2,jb3,jb4,jb5,jb6,jb7,jb8,AccountNa,AccountNu,SortNu;
+	private JTextArea jb9;
 	private int counter = 0;
 	private int ID;
 	private JPanel pan1,pan2,pan3, pan4, pan5, pan6, pan7, pan8, pan9,pan10,pan11,pan12;
@@ -65,7 +66,7 @@ public class Consultant extends JFrame{
 		pan2.add(lab1);
 		space1 = new JLabel("                                                                                                                ");
 		pan2.add(space1);
-		jb1 = new JTextArea(1,15);
+		jb1 = new JTextField(15);
 		pan2.add(jb1);
 		jb1.setEditable(false);
 		jb1.setText(title);
@@ -81,7 +82,7 @@ public class Consultant extends JFrame{
 		pan3.add(lab2);
 		space2 = new JLabel("                                                                                                    ");
 		pan3.add(space2);
-		jb2 = new JTextArea(1,15);
+		jb2 = new JTextField(15);
 		pan3.add(jb2);
 		jb2.setEditable(false);
 		jb2.setText(fn);
@@ -95,7 +96,7 @@ public class Consultant extends JFrame{
 		pan4.add(lab3);
 		space3 = new JLabel("                                                                                                    ");
 		pan4.add(space3);
-		jb3 = new JTextArea(1,15);
+		jb3 = new JTextField(15);
 		pan4.add(jb3);
 		jb3.setEditable(false);
 		jb3.setText(ln);
@@ -109,7 +110,7 @@ public class Consultant extends JFrame{
 		pan5.add(lab4);
 		space4 = new JLabel("                                                                                                        ");
 		pan5.add(space4);
-		jb4 = new JTextArea(1,15);
+		jb4 = new JTextField(15);
 		pan5.add(jb4);
 		jb4.setEditable(false);
 		jb4.setText(add);
@@ -123,7 +124,7 @@ public class Consultant extends JFrame{
 		pan6.add(lab5);
 		space5 = new JLabel("                                                                                                              ");
 		pan6.add(space5);
-		jb5 = new JTextArea(1,15);
+		jb5 = new JTextField(15);
 		pan6.add(jb5);
 		jb5.setEditable(false);
 		jb5.setText(email);
@@ -138,7 +139,7 @@ public class Consultant extends JFrame{
 		pan7.add(lab6);
 		space6 = new JLabel("                                                                                          ");
 		pan7.add(space6);
-		jb6 = new JTextArea(1,15);
+		jb6 = new JTextField(15);
 		pan7.add(jb6);
 		jb6.setEditable(false);
 		jb6.setText(conn);
@@ -152,7 +153,7 @@ public class Consultant extends JFrame{
 		pan8.add(lab8);
 		space7 = new JLabel("                                                                                                             £");
 		pan8.add(space7);
-		jb8 = new JTextArea(1,15);
+		jb8 = new JTextField(15);
 		pan8.add(jb8);
 		jb8.setEditable(false);
 		jb8.setText(price);
@@ -168,7 +169,7 @@ public class Consultant extends JFrame{
 		pan10.add(AccountName);
 		space9 = new JLabel("                                                                                                ");
 		pan10.add(space9);
-		AccountNa = new JTextArea(1,15);
+		AccountNa = new JTextField(15);
 		pan10.add(AccountNa);
 		AccountNa.setEditable(false);
 		AccountNa.setBorder(border);
@@ -181,7 +182,7 @@ public class Consultant extends JFrame{
 		pan11.add(AccountNum);
 		space10 = new JLabel("                                                                                          ");
 		pan11.add(space10);
-		AccountNu = new JTextArea(1,15);
+		AccountNu = new JTextField(15);
 		pan11.add(AccountNu);
 		AccountNu.setEditable(false);
 		AccountNu.setBorder(border);
@@ -194,7 +195,7 @@ public class Consultant extends JFrame{
 		pan12.add(SortNum);
 		space11 = new JLabel("                                                                                                       ");
 		pan12.add(space11);
-		SortNu = new JTextArea(1,15);
+		SortNu = new JTextField(15);
 		pan12.add(SortNu);
 		SortNu.setEditable(false);
 		SortNu.setBorder(border);
@@ -232,7 +233,6 @@ public class Consultant extends JFrame{
 		
 		jb9.setText(spec);
 		jb9.setEditable(false);
-		
 		
 		butt1 = new JButton("Edit");
 		pan1.add(butt1);
@@ -276,7 +276,7 @@ public class Consultant extends JFrame{
 		pan2.add(lab1);
 		lab2 = new JLabel("                                                                                                                ");
 		pan2.add(lab2);
-		jb1 = new JTextArea(1,15);
+		jb1 = new JTextField(15);
 		pan2.add(jb1);
 		jb1.setBorder(border);
 		
@@ -288,7 +288,7 @@ public class Consultant extends JFrame{
 		pan3.add(lab4);
 		lab4 = new JLabel("                                                                                                           ");
 		pan3.add(lab4);
-		jb2 = new JTextArea(1,15);
+		jb2 = new JTextField(15);
 		pan3.add(jb2);
 		jb2.setBorder(border);
 		
@@ -300,7 +300,7 @@ public class Consultant extends JFrame{
 		pan4.add(lab5);
 		lab6 = new JLabel("                                                                                                           ");
 		pan4.add(lab6);
-		jb3 = new JTextArea(1,15);
+		jb3 = new JTextField(15);
 		pan4.add(jb3);
 		jb3.setBorder(border);
 		
@@ -310,9 +310,9 @@ public class Consultant extends JFrame{
 		pan5.setBorder(BorderFactory.createEtchedBorder());
 		lab6 = new JLabel("Address:");
 		pan5.add(lab6);
-		lab7 = new JLabel("                                                                                                       ");
+		lab7 = new JLabel("                                                                                                         ");
 		pan5.add(lab7);
-		jb4 = new JTextArea(1,15);
+		jb4 = new JTextField(15);
 		pan5.add(jb4);
 		jb4.setBorder(border);
 		
@@ -322,9 +322,9 @@ public class Consultant extends JFrame{
 		pan6.setBorder(BorderFactory.createEtchedBorder());
 		lab7 = new JLabel("Email:");
 		pan6.add(lab7);
-		lab8 = new JLabel("                                                                                                             ");
+		lab8 = new JLabel("                                                                                                               ");
 		pan6.add(lab8);
-		jb5 = new JTextArea(1,15);
+		jb5 = new JTextField(15);
 		pan6.add(jb5);
 		jb5.setBorder(border);
 		
@@ -334,9 +334,9 @@ public class Consultant extends JFrame{
 		pan7.setBorder(BorderFactory.createEtchedBorder());
 		lab8 = new JLabel("Contact Number:");
 		pan7.add(lab8);
-		lab9 = new JLabel("                                                                                         ");
+		lab9 = new JLabel("                                                                                           ");
 		pan7.add(lab9);
-		jb6 = new JTextArea(1,15);
+		jb6 = new JTextField(15);
 		pan7.add(jb6);
 		jb6.setBorder(border);
 		
@@ -346,9 +346,9 @@ public class Consultant extends JFrame{
 		pan8.setBorder(BorderFactory.createEtchedBorder());
 		lab9 = new JLabel("Price: ");
 		pan8.add(lab9);
-		lab10 = new JLabel("                                                                                                             ");
+		lab10 = new JLabel("                                                                                                               ");
 		pan8.add(lab10);
-		jb7 = new JTextArea(1,15);
+		jb7 = new JTextField(15);
 		pan8.add(jb7);
 		jb7.setBorder(border);
 		
@@ -359,9 +359,9 @@ public class Consultant extends JFrame{
 		pan10.add(AccountName);
 		space9 = new JLabel("                                                                                                ");
 		pan10.add(space9);
-		AccountNa = new JTextArea(1,15);
+		AccountNa = new JTextField(15);
 		pan10.add(AccountNa);
-		AccountNa.setEditable(false);
+		//AccountNa.setEditable(false);
 		AccountNa.setBorder(border);
 		pan10.setBorder(BorderFactory.createEtchedBorder());
 				
@@ -372,9 +372,9 @@ public class Consultant extends JFrame{
 		pan11.add(AccountNum);
 		space10 = new JLabel("                                                                                          ");
 		pan11.add(space10);
-		AccountNu = new JTextArea(1,15);
+		AccountNu = new JTextField(15);
 		pan11.add(AccountNu);
-		AccountNu.setEditable(false);
+		//AccountNu.setEditable(false);
 		AccountNu.setBorder(border);
 		pan11.setBorder(BorderFactory.createEtchedBorder());
 				
@@ -385,9 +385,9 @@ public class Consultant extends JFrame{
 		pan12.add(SortNum);
 		space11 = new JLabel("                                                                                                       ");
 		pan12.add(space11);
-		SortNu = new JTextArea(1,15);
+		SortNu = new JTextField(15);
 		pan12.add(SortNu);
-		SortNu.setEditable(false);
+		//SortNu.setEditable(false);
 		SortNu.setBorder(border);
 		pan12.setBorder(BorderFactory.createEtchedBorder());
 		
@@ -413,11 +413,14 @@ public class Consultant extends JFrame{
 				jb5.setEditable(true);
 				jb6.setEditable(true);
 				jb8.setEditable(true);
+				AccountNa.setEditable(true);
+				AccountNu.setEditable(true);
+				SortNu.setEditable(true);
 				//As i add speciality through a drop-list
 				jb9.setEditable(false);
 				
 			}
-		if((e.getSource()==but1)&&(counter<1)){
+		else if((e.getSource()==but1)&&(counter<1)){
 			
 				counter+=1;
 				double amo =0;
@@ -440,7 +443,7 @@ public class Consultant extends JFrame{
 				//have to convert boolean to tiny int
 				
 				ConsultantObject r = new ConsultantObject(jb1.getText(), jb2.getText(), jb3.getText(), jb4.getText(),
-														  jb5.getText(), jb6.getText(), amo, "AccountName", 1234584, 403635);
+														  jb5.getText(), jb6.getText(), amo, "AccountName", 1234584, 403635,0);
 				consultantDMO.put(r);
 				
 				//Return messege with added consultants ID
@@ -452,21 +455,36 @@ public class Consultant extends JFrame{
 				
 				}catch(NumberFormatException eee){
 						JOptionPane.showMessageDialog(null, "Please Enter valid data" );
-						setVisible(false);
 				}
 		}
 		//Saving
-		if((e.getSource()==butt3)&&(counter<1)){
+		else if((e.getSource()==butt3)&&(counter<1)){
 			//need to update as not making new entry every time just changing info
 			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
 			GPSISDataMapper.connectToDatabase();
 			double tNum = Double.parseDouble(jb8.getText());
-			ConsultantObject r = new ConsultantObject(jb1.getText(),jb2.getText(),jb3.getText(),jb4.getText(),jb5.getText(),jb6.getText(),tNum,"AccountName", 1234567784, 403635);
+			ConsultantObject r = new ConsultantObject(jb1.getText(),jb2.getText(),jb3.getText(),jb4.getText(),jb5.getText(),jb6.getText(),tNum,"AccountName", 1234567784, 403635,0);
 			consultantDMO.put(r);
 		}
 		
         //Removed by ID
+		if(e.getSource()==butt2){
+			
+			String string = JOptionPane.showInputDialog("Are you sure?(Y or y for yes)");
+			if((string.equals("y"))||(string.equals("Y"))){
+				
+				JOptionPane.showMessageDialog(null, "Deleted" );
+				ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
+				GPSISDataMapper.connectToDatabase();
+				double tNum = Double.parseDouble(jb8.getText());
+				ConsultantObject r = new ConsultantObject(jb1.getText(),jb2.getText(),jb3.getText(),jb4.getText(),jb5.getText(),jb6.getText(),tNum,"AccountName", 1234567784, 403635,1);
+				consultantDMO.put(r);;
+			}
+			
+		}
 		
+		
+		/*
 		if(e.getSource()==butt2){
 			JOptionPane.showMessageDialog(null, "Deleted" );
 			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
@@ -477,7 +495,9 @@ public class Consultant extends JFrame{
 			//close current window here 
 
 		}
-		if(e.getSource()==butt4){
+			 */
+		
+		else if(e.getSource()==butt4){
 			//SpecialityDMO specialityDMO = SpecialityDMO.getInstance();
 			//GPSISDataMapper.connectToDatabase();
 			//SpecialityObject r = new SpecialityObject();

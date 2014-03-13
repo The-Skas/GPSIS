@@ -1,5 +1,6 @@
 package module.Referral;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,18 +63,28 @@ public class AddSpecialistType extends JFrame {
 		SpacingPan.add(BigSpace1);
 		Main.add(SpacingPan);
 		
-		//Populate dropdown
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		SpecialityTypeObject r = new SpecialityTypeObject();
+	
 		try {
-			set1 = specialityTypeDMO.getAll();
+	
+			List<SpecialityTypeObject> set1 = specialityTypeDMO.getAll();
+			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
+			List<ConsultantObject> set2 = consultantDMO.getAll();
+			
+			for(SpecialityTypeObject x:set1){
+				int temp = x.getConID();
+				
+				for(ConsultantObject y:set2){
+					
+					if(y.isActive()==0){
+						arr1.add(x.getName());
+					}
+				}
+			}
+			
 		} catch (EmptyResultSetException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		for(SpecialityTypeObject x:set1){
-			arr1.add(x.getName());
 		}
 		
 		//taking out duplicate entries
@@ -117,6 +128,8 @@ public class AddSpecialistType extends JFrame {
 		space2 = new JLabel("                                  ");
 		pan2.add(space2);
 		Main.add(pan2);
+		tlb1.setSize( tlb1.getPreferredSize() );
+		
 		
 		//Spacing Panel 2 
 		SpacingPan2 = new JPanel();
@@ -145,7 +158,7 @@ public class AddSpecialistType extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if((e.getSource()==but4)&&(tlb1.getText().length() !=0)){
-				//Add speciality from textarea to speciality sql table.
+				//Add speciality from text-area to speciality sql table.
 				//Speciality get by name and add by select* from Speciality where 
 				SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 				GPSISDataMapper.connectToDatabase();
@@ -172,17 +185,6 @@ public class AddSpecialistType extends JFrame {
 				
 				
 			}
-			//No longer needed
-			/*if(e.getSource()==but3){
-				
-				AddSpecialistType as = new AddSpecialistType(ID);
-				as.setVisible(true);
-				as.setSize(300, 170);
-				as.setTitle("Add Specialist type");
-				setVisible(false);
-				//close previous window upon opening this one
-			}`
-			*/
 		}
 		
 	}

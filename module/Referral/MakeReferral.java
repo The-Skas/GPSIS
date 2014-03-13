@@ -32,7 +32,7 @@ public class MakeReferral extends JFrame {
 	private String[] choicesB;
 	private JLabel lab1, lab2, lab3,sp,sp2,findinv,findinv2,space1,space2,space3,space4,space5,space6;
 	private JButton but1, but2, but3;
-	private JTextArea text1, text2;
+	private JTextField text1, text2;
 	private int con = 0,pat = 0,pay = 0,conId = 0; 
 	private Double price = 0.0;
 	private JPanel Main, pan1,pan2,pan3,pan4,pan5,pan6;
@@ -64,23 +64,32 @@ public class MakeReferral extends JFrame {
 		Main.add(pan4);
 				
 		//Connecting to database in GPSISMapper class
+		
 		SpecialityTypeDMO specialityTypeDMO = SpecialityTypeDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		SpecialityTypeObject r = new SpecialityTypeObject();
-		List<SpecialityTypeObject> set1;
 		try {
-			set1 = specialityTypeDMO.getAll();
-			//Using enhanced for loop to add just names not the whole object (for the dropdown list)
-			//Added to an array-list as its an unknown size(cant use an array)
+	
+			List<SpecialityTypeObject> set1 = specialityTypeDMO.getAll();
+			ConsultantDMO consultantDMO = ConsultantDMO.getInstance();
+		    
+			List<ConsultantObject> set2 = consultantDMO.getAll();
+			
 			for(SpecialityTypeObject x:set1){
-				choicesA.add(x.getName());
-				System.out.print(x.getName());
+				int temp = x.getConID();
+				
+				for(ConsultantObject y:set2){
+					
+					if(y.isActive()==0){
+						choicesA.add(x.getName());
+					}
+				}
 			}
 			
 		} catch (EmptyResultSetException e1) {
 			e1.printStackTrace();
 		}
 		
+
 		//taking out duplicate entry's by putting them into a hash-set 
 		HashSet hset = new HashSet();
 		//Add all of array-list
@@ -112,9 +121,9 @@ public class MakeReferral extends JFrame {
 		
 		//Name
 		pan2 = new JPanel();
-		lab2 = new JLabel("                                                              Enter Name: ");
+		lab2 = new JLabel("                                                           Enter Staff ID: ");
 		pan2.add(lab2);
-		text1 = new JTextArea(1,10);
+		text1 = new JTextField(10);
 		pan2.add(text1);
 		space2 = new JLabel("                                                            ");
 		pan2.add(space2);
@@ -126,7 +135,7 @@ public class MakeReferral extends JFrame {
 		pan3 = new JPanel();
 		lab3 = new JLabel("                                                       Enter Patient ID: ");
 		pan3.add(lab3);
-		text2 = new JTextArea(1,10);
+		text2 = new JTextField(10);
 		text2.setBorder(border);
 		pan3.add(text2);
 		space3 = new JLabel("                                                            ");
@@ -186,7 +195,7 @@ public class MakeReferral extends JFrame {
 						//make invoice so can get invoice id = overwrite it in invoice passing through inv id
 						//and payment
 						//Have to convert boolean to tiny int (1 and zero)
-				    	ReferralObject r = new ReferralObject(dt, text1.getText(), con, Integer.parseInt(text2.getText()),1);//last 2 have to be different
+				    	ReferralObject r = new ReferralObject(dt, Integer.parseInt(text1.getText()), con, Integer.parseInt(text2.getText()),1);//last 2 have to be different
 				    	referralDMO.put(r);
 				    	//Prints out id number to use for adding Speciality's
 				    	JOptionPane.showMessageDialog(null, "Your Referral ID is: "+ r.getId());
@@ -200,7 +209,7 @@ public class MakeReferral extends JFrame {
 						r2.setLocation(x+60, y+50);
 						r2.setVisible(true);
 						r2.setTitle("Payment");
-						r2.setSize(600, 350);
+						r2.setSize(600, 360);
 						
 						//Turn string to an integer willing that it is correct data (otherwise caught in catch)
 						pat = Integer.parseInt(text2.getText());
@@ -213,7 +222,7 @@ public class MakeReferral extends JFrame {
 			
 				//Catches if data entered into text fields is null if so the corresponding pop-up is shown
 				else if(text1.getText().length() <1){
-						JOptionPane.showMessageDialog(null, "Enter Your Name!");
+						JOptionPane.showMessageDialog(null, "Enter Your ID!");
 				}
 				else if(text2.getText().length() <1){
 						JOptionPane.showMessageDialog(null, "Enter Patients ID!");
@@ -229,7 +238,7 @@ public class MakeReferral extends JFrame {
 		java.util.Date dt = cal.getTime();
 		ReferralDMO referralDMO = ReferralDMO.getInstance();
 		GPSISDataMapper.connectToDatabase();
-		ReferralObject r = new ReferralObject(dt, "matt", 8, Integer.parseInt("566"),1);
+		ReferralObject r = new ReferralObject(dt, 6, 8, Integer.parseInt("566"),1);
     	referralDMO.put(r);
     	System.out.print(r.getId());
     	

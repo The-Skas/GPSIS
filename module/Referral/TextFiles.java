@@ -54,7 +54,7 @@ public class TextFiles {
         bufferedWriter.close();
 		
 	}
-	
+	/*
 	//For payment (for acounting to read)
 	public void buildPaymentFile(String payId, String nameOnCard, String accNum, String exDate, String CSC, String total) throws IOException{
 		
@@ -73,6 +73,7 @@ public class TextFiles {
         bufferedWriter.close();
 		
 	}
+	*/
 	public static void buildInvoicePayment(String invId, String total, ConsultantObject consult){
 		
 		String body = "" + consult.getAccName() + " " + consult.getAccNum()+ " "+ consult.getSortCode() ;

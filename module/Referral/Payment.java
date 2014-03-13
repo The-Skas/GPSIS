@@ -36,10 +36,10 @@ import framework.GPSISDataMapper;
 public class Payment extends JFrame {
 	 
 	private JLabel lab1,lab2,lab3,lab4,lab5,lab6, sp,xtra;
-	private JTextArea a1,a2,a3,a4,a5,a6,ax;
+	private JTextField a1,a2,a3,a4,a5,a6,ax;
 	private JButton but1;
 	private BufferedWriter writer;
-	private int id, refid,conid;
+	private int id, refid,conid,counter = 0;
 	private double price;
 	private JPanel pan1,pan2,pan3,pan4,pan5,pan6,pan7,pan8,pan9,pan10,main;
 	private JMenuItem itm;
@@ -77,7 +77,7 @@ public class Payment extends JFrame {
 		pan1.add(lab1); 
 		space1 = new JLabel("                                                                                                    ");
 		pan1.add(space1);
-		a1 = new JTextArea(1,15);
+		a1 = new JTextField(15);
 		a1.setBorder(border);
 		pan1.add(a1);
 		a1.setText("Not Paid");
@@ -90,7 +90,7 @@ public class Payment extends JFrame {
 		pan2.add(xtra); 
 		space2 = new JLabel("                                                                                                      ");
 		pan2.add(space2);
-		ax = new JTextArea(1,15);
+		ax = new JTextField(15);
 		ax.setBorder(border);
 		pan2.add(ax);
 		ax.setText(""+ refid);
@@ -103,7 +103,7 @@ public class Payment extends JFrame {
 		pan3.add(lab6); 
 		space3 = new JLabel("                                                                                                ");
 		pan3.add(space3);
-		a6 = new JTextArea(1,15);
+		a6 = new JTextField(15);
 		a6.setBorder(border);
 		pan3.add(a6);
 		pan3.setBorder(BorderFactory.createEtchedBorder());
@@ -114,7 +114,7 @@ public class Payment extends JFrame {
 		pan4.add(lab2); 
 		space4 = new JLabel("                                                                                                              ");
 		pan4.add(space4);
-		a2 = new JTextArea(1,15);
+		a2 = new JTextField(15);
 		a2.setBorder(border);
 		pan4.add(a2);
 		pan4.setBorder(BorderFactory.createEtchedBorder());
@@ -126,7 +126,7 @@ public class Payment extends JFrame {
 		pan5.add(lab3); 
 		space5 = new JLabel("                                                                                                 ");
 		pan5.add(space5);
-		a3 = new JTextArea(1,15);
+		a3 = new JTextField(15);
 		a3.setBorder(border);
 		pan5.add(a3);
 		pan5.setBorder(BorderFactory.createEtchedBorder());
@@ -137,7 +137,7 @@ public class Payment extends JFrame {
 		pan6.add(lab4); 
 		space6 = new JLabel("                                                                                                         ");
 		pan6.add(space6);
-		a4 = new JTextArea(1,15);
+		a4 = new JTextField(15);
 		a4.setBorder(border);
 		pan6.add(a4);
 		pan6.setBorder(BorderFactory.createEtchedBorder());
@@ -148,15 +148,18 @@ public class Payment extends JFrame {
 		pan7.add(lab5); 
 		space7 = new JLabel("                                                                                                          ");
 		pan7.add(space7);
-		a5 = new JTextArea(1,15);
+		a5 = new JTextField(15);
 		a5.setBorder(border);
 		pan7.add(a5);
 		pan7.setBorder(BorderFactory.createEtchedBorder());
 		main.add(pan7);
 		
+		if(counter<1){
 		but1 = new JButton("Pay");
 		main.add(but1);
 		but1.addActionListener(e);
+		counter +=1;
+		}
 		
 		sp = new JLabel("");
 		main.add(sp);
@@ -193,11 +196,13 @@ public class Payment extends JFrame {
 					
 					//Send Letters to both patient and Consultant
 					TextFiles SendLetters = new TextFiles();
-					try {
+					
+					/*try {
 						SendLetters.buildPaymentFile(""+r.getId(), ""+r.getName(), ""+r.getAccNum(), ""+r.getEX(), ""+r.getCSC(), ""+r.getTotal());
 					} catch (IOException e5) {
 						e5.printStackTrace();
 					}
+					*//*
 					
 					ReferralDMO ref = ReferralDMO.getInstance();
 					GPSISDataMapper.connectToDatabase();
@@ -230,19 +235,19 @@ public class Payment extends JFrame {
 							patName = x.getFirstName() + " " + x.getLastName();
 						}
 					}
-					
+					/*
 					try {
-						SendLetters.buildConsultantsLetter(""+ refid, consult.getFName(), consult.getLName(), refobj.getDocName(), ""+consult.getId(), consult.getAddress(), patName, r.getTotal());
+						SendLetters.buildConsultantsLetter(""+ refid, consult.getFName(), consult.getLName(), ""+refobj.getDocId(), ""+consult.getId(), consult.getAddress(), patName, r.getTotal());
 					} catch (IOException e2) {
-						e2.printStackTrace();
+						JOptionPane.showMessageDialog(null,  "No Such Doctor");
 					}
 					try {
-						TextFiles.buildPatientsLetter(""+ refid, patobj.getFirstName(), patobj.getLastName(), patobj.getAddress(), refobj.getDocName(), ""+consult.getId(), consult.getFName() + 
+						TextFiles.buildPatientsLetter(""+ refid, patobj.getFirstName(), patobj.getLastName(), patobj.getAddress(), ""+refobj.getDocId(), ""+consult.getId(), consult.getFName() + 
 								consult.getLName(), consult.getAddress(), ""+r.getId(), r.getTotal(), ""+consult.getNum());
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-					
+					*/
 					setVisible(false);
 					
 			}else{
